@@ -59,6 +59,9 @@ int main(void)
        2, 3, 0
     };
 
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+
     VertexArray va;
     VertexBufferLayout vbl;
     vbl.Push(GLuint(2), GL_FLOAT, GL_FALSE, 2 * sizeof(float));
