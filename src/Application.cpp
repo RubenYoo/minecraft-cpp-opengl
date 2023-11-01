@@ -7,6 +7,8 @@
 #include <sstream>
 
 #include "GLDebugMessageCallback.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
 
 struct ShaderProgramSource {
     std::string vertexShader;
@@ -149,19 +151,12 @@ int main(void)
     glGenVertexArrays(GLsizei(1), &vao);
     glBindVertexArray(vao);
 
-    GLuint buffer;
-    glGenBuffers(GLsizei(1), &buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(float), positions, GL_STATIC_DRAW);
-
+    VertexBuffer vb(positions, 4 * 2 * sizeof(float), GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(GLuint(0), GLuint(2), GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
 
-    GLuint ibo;
-    glGenBuffers(GLsizei(1), &ibo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
+    IndexBuffer ib(indices, 6, GL_STATIC_DRAW);
 
     ShaderProgramSource source = ParseShader("res/shaders/Basic.shader");
     GLuint shader = CreateShader(source.vertexShader, source.fragmentShader);
@@ -176,7 +171,7 @@ int main(void)
 
     glUseProgram(shader);
     glBindVertexArray(vao);
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    //ib.Bind();
 
 
     GLfloat r = 0.0f;
