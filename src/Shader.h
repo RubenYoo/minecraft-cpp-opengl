@@ -18,6 +18,7 @@ public:
 	void Unbind() const;
 
 	void SetUniform4f(const std::string& name, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3);
+	void SetUniform1i(const std::string& name, GLint value);
 
 private:
 	GLuint m_RendererID;

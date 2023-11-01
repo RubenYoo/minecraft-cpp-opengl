@@ -80,6 +80,11 @@ GLuint Shader::CompileShader(GLenum type, const std::string& source)
     return id;
 }
 
+void Shader::SetUniform1i(const std::string& name, GLint value)
+{
+    glUniform1i(GetUniformLocation(name), value);
+}
+
 GLuint Shader::CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
 {
     GLuint program = glCreateProgram();
