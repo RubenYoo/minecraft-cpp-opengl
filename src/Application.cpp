@@ -9,6 +9,8 @@
 #include "GLDebugMessageCallback.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "VertexArray.h"
+#include "VertexBufferLayout.h"
 
 struct ShaderProgramSource {
     std::string vertexShader;
@@ -147,14 +149,13 @@ int main(void)
        2, 3, 0
     };
 
-    GLuint vao;
-    glGenVertexArrays(GLsizei(1), &vao);
-    glBindVertexArray(vao);
+    VertexArray vao;
+    VertexBufferLayout vbl;
+    vbl.Push(GLuint(2), GL_FLOAT, GL_FALSE, 2 * sizeof(float));
 
     VertexBuffer vb(positions, 4 * 2 * sizeof(float), GL_STATIC_DRAW);
 
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(GLuint(0), GLuint(2), GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+    vao.AddBuffer(vb, vbl);
 
     IndexBuffer ib(indices, 6, GL_STATIC_DRAW);
 
@@ -165,15 +166,9 @@ int main(void)
     GLint location = glGetUniformLocation(shader, "u_Color");
     _ASSERT(location != -1);
 
-    glUseProgram(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
     glUseProgram(shader);
-    glBindVertexArray(vao);
-    //ib.Bind();
-
-
+    vao.Bind();
+ 
     GLfloat r = 0.0f;
     GLfloat increment = 0.05f;
 
