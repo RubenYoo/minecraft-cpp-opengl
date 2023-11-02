@@ -18,6 +18,7 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
+#include "tests/TestClearColor.h"
 
 
 int main(void)
@@ -54,6 +55,7 @@ int main(void)
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
+    /*
     float positions[] = {
        -50.0f, -50.0f, 0.0f, 0.0f,
         50.0f, -50.0f, 1.0f, 0.0f,
@@ -93,8 +95,10 @@ int main(void)
     shader.SetUniform1i("u_Texture", 0);
 
     va.Bind();
+    */
 
     Renderer renderer;
+    
  
     const char* glsl_version = "#version 150";
     IMGUI_CHECKVERSION();
@@ -106,19 +110,28 @@ int main(void)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
+
+    /*
     glm::vec3 translationA(200.0f, 200.0f, 0.0f);
     glm::vec3 translationB(300.0f, 200.0f, 0.0f);
+    */
 
-    /* Loop until the user closes the window */
+    test::TestClearColor test;
+
     while (!glfwWindowShouldClose(window))
     {
-        /* Render here */
         renderer.Clear();
+
+        test.OnUpdate(0.0f);
+        test.OnRender();
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
+        test.OnImGuiRender();
+
+        /*
         {
             glm::mat4 model = glm::translate(glm::mat4(1.0f), translationA);
             glm::mat4 mvp = proj * view * model;
@@ -160,14 +173,13 @@ int main(void)
             ImGui::End();
 
         }
+        */
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
-        /* Poll for and process events */
         glfwPollEvents();
     }
 
