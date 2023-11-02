@@ -29,7 +29,7 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Minecraft", NULL, NULL);
+    window = glfwCreateWindow(960, 540, "Minecraft", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -51,10 +51,10 @@ int main(void)
     std::cout << glGetString(GL_VERSION) << std::endl;
 
     float positions[] = {
-       -0.5f, -0.5f, 0.0f, 0.0f,
-        0.5F, -0.5f, 1.0f, 0.0f,
-        0.5f,  0.5f, 1.0f, 1.0f,
-       -0.5f, 0.5f, 0.0f, 1.0f
+       100.0f, 100.0f, 0.0f, 0.0f,
+       200.0f, 100.0f, 1.0f, 0.0f,
+       200.0f, 200.0f, 1.0f, 1.0f,
+       100.0f, 200.0f, 0.0f, 1.0f
     };
 
     unsigned int indices[6] = {
@@ -76,24 +76,25 @@ int main(void)
 
     IndexBuffer ib(indices, 6, GL_STATIC_DRAW);
 
-    glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+    glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
+    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-100.0f, 0.0f, 0.0f));
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(200.0f, 200.0f, 0.0f));
+
+    glm::mat4 mvp = proj * view * model;
 
     Shader shader("res/shaders/Basic.shader");
     shader.Bind();
 
-    //shader.SetUniform4f("u_Color", GLfloat(0.8f), GLfloat(0.3f), GLfloat(0.8f), GLfloat(1.0f));
 
     Texture texture("res/textures/dirt_block.png");
     texture.Bind();
     shader.SetUniform1i("u_Texture", 0);
-    shader.SetUniformMat4f("u_MVP", proj);
+    shader.SetUniformMat4f("u_MVP", mvp);
 
     va.Bind();
 
     Renderer renderer;
  
-    //GLfloat r = 0.0f;
-    //GLfloat increment = 0.05f;
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -101,19 +102,7 @@ int main(void)
         /* Render here */
         renderer.Clear();
 
-        //shader.SetUniform4f("u_Color", r, GLfloat(0.3f), GLfloat(0.8f), GLfloat(1.0f));
-
         renderer.Draw(va, ib, shader);
-        //glDrawElements(GL_TRIANGLES, GLint(6), GL_UNSIGNED_INT, nullptr);
-
-        /*
-        if (r >= 1.0f)
-            increment = -0.05f;
-        else if (r <= 0.0f)
-            increment = 0.05f;
-
-        r += increment;
-        */
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
