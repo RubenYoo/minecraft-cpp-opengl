@@ -107,7 +107,7 @@ int main(void)
     ImGui_ImplOpenGL3_Init(glsl_version);
 
     glm::vec3 translationA(200.0f, 200.0f, 0.0f);
-    glm::vec3 translationB(400.0f, 200.0f, 0.0f);
+    glm::vec3 translationB(300.0f, 200.0f, 0.0f);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -135,12 +135,30 @@ int main(void)
 
         {
             ImGui::Begin("Modifications");
-            ImGui::SliderFloat3("Translation first block", &translationA.x, 0.0f, 960.0f);
 
-            ImGui::SliderFloat3("Translation second block", &translationB.x, 0.0f, 960.0f);
+            ImGui::Text("Translation for first block:");
+            ImGui::PushItemWidth(100);
+            ImGui::SliderFloat("X##TranslationA", &translationA.x, 0.0f, 960.0f);
+            ImGui::SameLine();
+            ImGui::SliderFloat("Y##TranslationA", &translationA.y, 0.0f, 540.0f);
+            ImGui::SameLine();
+            ImGui::SliderFloat("Z##TranslationA", &translationA.z, 0.0f, 2);
+            ImGui::PopItemWidth();
+
+            ImGui::Separator();
+
+            ImGui::Text("Translation for second block:");
+            ImGui::PushItemWidth(100);
+            ImGui::SliderFloat("X##TranslationB", &translationB.x, 0.0f, 960.0f);
+            ImGui::SameLine();
+            ImGui::SliderFloat("Y##TranslationB", &translationB.y, 0.0f, 540.0f);
+            ImGui::SameLine();
+            ImGui::SliderFloat("Z##TranslationB", &translationB.z, 0.0f, 2);
+            ImGui::PopItemWidth();
 
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
             ImGui::End();
+
         }
 
         ImGui::Render();
