@@ -12,6 +12,8 @@
 #include "Renderer.h"
 #include "Texture.h"
 
+#include "Camera.h"
+
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
@@ -107,11 +109,7 @@ int main(void)
 
     IndexBuffer ib(indices, sizeof(indices) / sizeof(unsigned int), GL_STATIC_DRAW);
 
-    glm::mat4 proj = glm::perspective(glm::radians(45.0f), float(width / height), 0.1f, 100.0f); // 3D
-
-    glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f),  // Camera position
-        glm::vec3(0.0f, 0.0f, 0.0f),  // Look at the origin
-        glm::vec3(0.0f, 1.0f, 0.0f)); // Up vector
+    Camera camera(width, height, glm::vec3(0.0f, 0.0f, 3.0f));
 
     Shader shader("res/shaders/Basic.shader");
     shader.Bind();
@@ -143,28 +141,24 @@ int main(void)
     {
         glClearColor(m_ClearColor[0], m_ClearColor[1], m_ClearColor[2], m_ClearColor[3]);
         renderer.Clear();
-
-        //test.OnUpdate(0.0f);
-        //test.OnRender();
+        camera.Inputs(window);
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        //test.OnImGuiRender();
-
         {
             glm::mat4 model = glm::translate(glm::mat4(1.0f), translationA);
-            glm::mat4 mvp = proj * view * model;
+            glm::mat4 mvp = camera.CalcCameraMatrix(45.0f, 0.1f, 100.0f) * model;
             shader.SetUniformMat4f("u_MVP", mvp);
             renderer.Draw(va, ib, shader);
         }
 
         {
             glm::mat4 model = glm::translate(glm::mat4(1.0f), translationB);
-            glm::mat4 mvp = proj * view * model;
+            glm::mat4 mvp = camera.CalcCameraMatrix(45.0f, 0.1f, 100.0f) * model;
             shader.SetUniformMat4f("u_MVP", mvp);
-            //renderer.Draw(va, ib, shader);
+            renderer.Draw(va, ib, shader);
         }
 
         {
