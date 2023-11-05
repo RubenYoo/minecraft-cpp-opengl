@@ -20,6 +20,8 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include "tests/TestClearColor.h"
 
+#define width 1600.0f
+#define height 800.0f
 
 int main(void)
 {
@@ -34,7 +36,7 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(960, 540, "Minecraft", NULL, NULL);
+    window = glfwCreateWindow(width, height, "Minecraft", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -44,7 +46,7 @@ int main(void)
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
-    glfwSwapInterval(1);
+    //glfwSwapInterval(1);
 
     if (glewInit() != GLEW_OK)
         std::cout << "Error: Glew was not init" << std::endl;
@@ -55,51 +57,74 @@ int main(void)
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-    /*
     float positions[] = {
-       -50.0f, -50.0f, 0.0f, 0.0f,
-        50.0f, -50.0f, 1.0f, 0.0f,
-        50.0f,  50.0f, 1.0f, 1.0f,
-       -50.0f,  50.0f, 0.0f, 1.0f
+       -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+        0.5f,  0.5f, 0.5f, 1.0f, 1.0f,
+       -0.5f,  0.5f, 0.5f, 0.0f, 1.0f,
+
+       -0.3f, -0.3f, -0.5f, 1.0f, 0.0f,
+        0.7f, -0.3f, -0.5f, 0.0f, 0.0f,
+        0.7f,  0.7f, -0.5f, 0.0f, 1.0f,
+       -0.3f,  0.7f, -0.5f, 1.0f, 1.0f,
+
+       -0.5f,  0.5f, 0.5f, 0.0f, 0.0f,
+        0.5f,  0.5f, 0.5f, 1.0f, 0.0f,
+        0.7f,  0.7f, -0.5f, 1.0f, 1.0f,
+       -0.3f,  0.7f, -0.5f, 0.0f, 1.0f
+
     };
 
-    unsigned int indices[6] = {
+    unsigned int indices[] = {
        0, 1, 2,
-       2, 3, 0
+       2, 3, 0,
+       2, 1, 5,
+       5, 6, 2,
+       5, 6, 4,
+       4, 7, 6,
+       4, 7, 3,
+       3, 0, 4,
+       3, 2, 6,
+       6, 7, 3,
+       0, 1, 5,
+       5, 4, 0,
+       0, 1, 5,
+       5, 4, 0
     };
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
+    glEnable(GL_DEPTH_TEST);
 
     VertexArray va;
     VertexBufferLayout vbl;
-    vbl.Push(GLuint(2), GL_FLOAT, GL_FALSE, 2 * sizeof(float));
+    vbl.Push(GLuint(3), GL_FLOAT, GL_FALSE, 3 * sizeof(float));
     vbl.Push(GLuint(2), GL_FLOAT, GL_FALSE, 2 * sizeof(float));
 
-    VertexBuffer vb(positions, 4 * 4 * sizeof(float), GL_STATIC_DRAW);
+    VertexBuffer vb(positions, sizeof(positions), GL_STATIC_DRAW);
 
     va.AddBuffer(vb, vbl);
 
-    IndexBuffer ib(indices, 6, GL_STATIC_DRAW);
+    IndexBuffer ib(indices, sizeof(indices) / sizeof(unsigned int), GL_STATIC_DRAW);
 
-    glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
-    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+    glm::mat4 proj = glm::perspective(glm::radians(45.0f), float(width / height), 0.1f, 100.0f); // 3D
 
+    glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f),  // Camera position
+        glm::vec3(0.0f, 0.0f, 0.0f),  // Look at the origin
+        glm::vec3(0.0f, 1.0f, 0.0f)); // Up vector
 
     Shader shader("res/shaders/Basic.shader");
     shader.Bind();
 
-
     Texture texture("res/textures/dirt_block.png");
     texture.Bind();
     shader.SetUniform1i("u_Texture", 0);
+    //shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.2f, 1.0f);
 
     va.Bind();
-    */
 
     Renderer renderer;
-    
- 
+
     const char* glsl_version = "#version 150";
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -110,28 +135,24 @@ int main(void)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
-
-    /*
-    glm::vec3 translationA(200.0f, 200.0f, 0.0f);
-    glm::vec3 translationB(300.0f, 200.0f, 0.0f);
-    */
-
-    test::TestClearColor test;
+    glm::vec3 translationA(0.0f, 0.0f, 0.0f);
+    glm::vec3 translationB(1.0f, 0.0f, 0.0f);
+    GLfloat m_ClearColor[] = { 0.729f, 0.976f, 1.0f, 1.0f };
 
     while (!glfwWindowShouldClose(window))
     {
+        glClearColor(m_ClearColor[0], m_ClearColor[1], m_ClearColor[2], m_ClearColor[3]);
         renderer.Clear();
 
-        test.OnUpdate(0.0f);
-        test.OnRender();
+        //test.OnUpdate(0.0f);
+        //test.OnRender();
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        test.OnImGuiRender();
+        //test.OnImGuiRender();
 
-        /*
         {
             glm::mat4 model = glm::translate(glm::mat4(1.0f), translationA);
             glm::mat4 mvp = proj * view * model;
@@ -143,7 +164,7 @@ int main(void)
             glm::mat4 model = glm::translate(glm::mat4(1.0f), translationB);
             glm::mat4 mvp = proj * view * model;
             shader.SetUniformMat4f("u_MVP", mvp);
-            renderer.Draw(va, ib, shader);
+            //renderer.Draw(va, ib, shader);
         }
 
         {
@@ -151,35 +172,32 @@ int main(void)
 
             ImGui::Text("Translation for first block:");
             ImGui::PushItemWidth(100);
-            ImGui::SliderFloat("X##TranslationA", &translationA.x, 0.0f, 960.0f);
+            ImGui::SliderFloat("X##TranslationA", &translationA.x, -5.0f, 5.0f);
             ImGui::SameLine();
-            ImGui::SliderFloat("Y##TranslationA", &translationA.y, 0.0f, 540.0f);
+            ImGui::SliderFloat("Y##TranslationA", &translationA.y, -5.0f, 5.0f);
             ImGui::SameLine();
-            ImGui::SliderFloat("Z##TranslationA", &translationA.z, 0.0f, 2);
+            ImGui::SliderFloat("Z##TranslationA", &translationA.z, -5.0f, 5.0f);
             ImGui::PopItemWidth();
 
             ImGui::Separator();
 
             ImGui::Text("Translation for second block:");
             ImGui::PushItemWidth(100);
-            ImGui::SliderFloat("X##TranslationB", &translationB.x, 0.0f, 960.0f);
+            ImGui::SliderFloat("X##TranslationB", &translationB.x, -2.0f, 2.0f);
             ImGui::SameLine();
-            ImGui::SliderFloat("Y##TranslationB", &translationB.y, 0.0f, 540.0f);
+            ImGui::SliderFloat("Y##TranslationB", &translationB.y, -2.0f, 2.0f);
             ImGui::SameLine();
-            ImGui::SliderFloat("Z##TranslationB", &translationB.z, 0.0f, 2);
+            ImGui::SliderFloat("Z##TranslationB", &translationB.z, -2.0f, 2.0f);
             ImGui::PopItemWidth();
 
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
             ImGui::End();
-
         }
-        */
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(window);
-
         glfwPollEvents();
     }
 
