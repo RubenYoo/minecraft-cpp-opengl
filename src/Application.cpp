@@ -65,10 +65,10 @@ int main(void)
         0.5f,  0.5f, 0.5f, 1.0f, 1.0f,
        -0.5f,  0.5f, 0.5f, 0.0f, 1.0f,
 
-       -0.3f, -0.3f, -0.5f, 1.0f, 0.0f,
-        0.7f, -0.3f, -0.5f, 0.0f, 0.0f,
-        0.7f,  0.7f, -0.5f, 0.0f, 1.0f,
-       -0.3f,  0.7f, -0.5f, 1.0f, 1.0f,
+       -0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
+        0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+        0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
+       -0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
 
        -0.5f,  0.5f, 0.5f, 0.0f, 0.0f,
         0.5f,  0.5f, 0.5f, 1.0f, 0.0f,
@@ -80,23 +80,24 @@ int main(void)
     unsigned int indices[] = {
        0, 1, 2,
        2, 3, 0,
-       2, 1, 5,
-       5, 6, 2,
-       5, 6, 4,
-       4, 7, 6,
-       4, 7, 3,
-       3, 0, 4,
+       1, 5, 6,
+       6, 2, 1,
+       5, 4, 7,
+       7, 6, 5,
+       4, 0, 3,
+       3, 7, 4,
        3, 2, 6,
        6, 7, 3,
        0, 1, 5,
        5, 4, 0,
-       0, 1, 5,
-       5, 4, 0
     };
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_CULL_FACE);
+    //glFrontFace(GL_CW);
+    //glCullFace(GL_FRONT);
 
     VertexArray va;
     VertexBufferLayout vbl;

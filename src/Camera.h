@@ -31,5 +31,8 @@ private:
 
 	float m_Yaw;
 	float m_Pitch;
+
+	double m_LastMouseX;
+	double m_LastMouseY;
 };
 
