@@ -8,7 +8,10 @@ Texture::Texture(const std::string& filepath)
 	m_LocalBuffer = stbi_load(filepath.c_str(), &m_Width, &m_Height, &m_BPP, 4);
 
 	if (!m_LocalBuffer)
+	{
 		std::cout << "Can't load texture from " << filepath << "file" << std::endl << stbi_failure_reason() << std::endl;
+		return;
+	}
 
 	glGenTextures(GLsizei(1), &m_RendererId);
 	glBindTexture(GL_TEXTURE_2D, m_RendererId);
