@@ -59,22 +59,28 @@ int main(void)
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
+    float texPos = 1.0f / 16.0f;
+
     float positions[] = {
-       -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-        0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-        0.5f,  0.5f, 0.5f, 1.0f, 1.0f,
-       -0.5f,  0.5f, 0.5f, 0.0f, 1.0f,
+       -0.5f, -0.5f, 0.5f, texPos, texPos * 15,
+        0.5f, -0.5f, 0.5f, texPos * 2, texPos * 15,
+        0.5f,  0.5f, 0.5f, texPos * 2, texPos * 16,
+       -0.5f,  0.5f, 0.5f, texPos, texPos * 16,
 
-       -0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
-        0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-        0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
-       -0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
+       -0.5f, -0.5f, -0.5f, texPos * 2, texPos * 15,
+        0.5f, -0.5f, -0.5f, texPos, texPos * 15,
+        0.5f,  0.5f, -0.5f, texPos, texPos * 16,
+       -0.5f,  0.5f, -0.5f, texPos * 2, texPos * 16,
 
-       -0.5f,  0.5f, 0.5f, 0.0f, 0.0f,
-        0.5f,  0.5f, 0.5f, 1.0f, 0.0f,
-        0.7f,  0.7f, -0.5f, 1.0f, 1.0f,
-       -0.3f,  0.7f, -0.5f, 0.0f, 1.0f
+       -0.5f,  0.5f, 0.5f, texPos * 2, texPos * 15,
+        0.5f,  0.5f, 0.5f, texPos * 3, texPos * 15,
+        0.5f,  0.5f, -0.5f, texPos * 3, texPos * 16,
+       -0.5f,  0.5f, -0.5f, texPos * 2, texPos * 16,
 
+       -0.5f, -0.5f, 0.5f, 0, texPos * 15,
+        0.5f, -0.5f, 0.5f, texPos, texPos * 15,
+        0.5f, -0.5f, -0.5f, texPos, texPos * 16,
+       -0.5f,  -0.5f, -0.5f, 0, texPos * 16
     };
 
     unsigned int indices[] = {
@@ -86,10 +92,10 @@ int main(void)
        7, 6, 5,
        4, 0, 3,
        3, 7, 4,
-       3, 2, 6,
-       6, 7, 3,
-       0, 1, 5,
-       5, 4, 0,
+       8, 9, 10,
+       10, 11, 8,
+       12, 13, 14,
+       14, 15, 12
     };
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -115,7 +121,7 @@ int main(void)
     Shader shader("res/shaders/Basic.shader");
     shader.Bind();
 
-    Texture texture("res/textures/grass_block_side.png");
+    Texture texture("res/textures/texture_pack.png");
     texture.Bind();
     shader.SetUniform1i("u_Texture", 0);
     //shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.2f, 1.0f);
