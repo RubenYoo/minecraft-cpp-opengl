@@ -3,11 +3,11 @@
 
 #include <iostream>
 
-#include "GLDebugMessageCallback.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "VertexArray.h"
-#include "VertexBufferLayout.h"
+#include "openGL/GLDebugMessageCallback.h"
+#include "openGL/VertexBuffer.h"
+#include "openGL/IndexBuffer.h"
+#include "openGL/VertexArray.h"
+#include "openGL/VertexBufferLayout.h"
 #include "Shader.h"
 #include "Renderer.h"
 #include "Texture.h"
