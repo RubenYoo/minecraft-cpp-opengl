@@ -1,5 +1,6 @@
 .vs/
 Debug/
 x64/
+.idea/
 *.vcxproj
 *.vcxproj.*
