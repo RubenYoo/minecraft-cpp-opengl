@@ -115,7 +115,7 @@ int main(void)
     Shader shader("res/shaders/Basic.shader");
     shader.Bind();
 
-    Texture texture("res/textures/dirt_block.png");
+    Texture texture("res/textures/grass_block_side.png");
     texture.Bind();
     shader.SetUniform1i("u_Texture", 0);
     //shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.2f, 1.0f);
