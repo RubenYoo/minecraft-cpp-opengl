@@ -4,10 +4,6 @@
 #include <iostream>
 
 #include "openGL/GLDebugMessageCallback.h"
-#include "openGL/VertexBuffer.h"
-#include "openGL/IndexBuffer.h"
-#include "openGL/VertexArray.h"
-#include "openGL/VertexBufferLayout.h"
 #include "Shader.h"
 #include "Renderer.h"
 #include "Texture.h"
