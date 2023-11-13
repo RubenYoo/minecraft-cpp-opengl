@@ -11,6 +11,7 @@
 #include "Shader.h"
 #include "Renderer.h"
 #include "Texture.h"
+#include "Mesh.h"
 
 #include "Camera.h"
 
@@ -22,8 +23,8 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include "tests/TestClearColor.h"
 
-#define width 1600.0f
-#define height 800.0f
+#define width 1600
+#define height 800
 
 int main(void)
 {
@@ -59,45 +60,6 @@ int main(void)
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-    float texPos = 1.0f / 16.0f;
-
-    float positions[] = {
-       -0.5f, -0.5f, 0.5f, texPos, texPos * 15,
-        0.5f, -0.5f, 0.5f, texPos * 2, texPos * 15,
-        0.5f,  0.5f, 0.5f, texPos * 2, texPos * 16,
-       -0.5f,  0.5f, 0.5f, texPos, texPos * 16,
-
-       -0.5f, -0.5f, -0.5f, texPos * 2, texPos * 15,
-        0.5f, -0.5f, -0.5f, texPos, texPos * 15,
-        0.5f,  0.5f, -0.5f, texPos, texPos * 16,
-       -0.5f,  0.5f, -0.5f, texPos * 2, texPos * 16,
-
-       -0.5f,  0.5f, 0.5f, texPos * 2, texPos * 15,
-        0.5f,  0.5f, 0.5f, texPos * 3, texPos * 15,
-        0.5f,  0.5f, -0.5f, texPos * 3, texPos * 16,
-       -0.5f,  0.5f, -0.5f, texPos * 2, texPos * 16,
-
-       -0.5f, -0.5f, 0.5f, 0, texPos * 15,
-        0.5f, -0.5f, 0.5f, texPos, texPos * 15,
-        0.5f, -0.5f, -0.5f, texPos, texPos * 16,
-       -0.5f,  -0.5f, -0.5f, 0, texPos * 16
-    };
-
-    unsigned int indices[] = {
-       0, 1, 2,
-       2, 3, 0,
-       1, 5, 6,
-       6, 2, 1,
-       5, 4, 7,
-       7, 6, 5,
-       4, 0, 3,
-       3, 7, 4,
-       8, 9, 10,
-       10, 11, 8,
-       12, 13, 14,
-       14, 15, 12
-    };
-
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
@@ -105,16 +67,45 @@ int main(void)
     //glFrontFace(GL_CW);
     //glCullFace(GL_FRONT);
 
-    VertexArray va;
-    VertexBufferLayout vbl;
-    vbl.Push(GLuint(3), GL_FLOAT, GL_FALSE, 3 * sizeof(float));
-    vbl.Push(GLuint(2), GL_FLOAT, GL_FALSE, 2 * sizeof(float));
+    float texPos = 1.0f / 16.0f;
 
-    VertexBuffer vb(positions, sizeof(positions), GL_STATIC_DRAW);
+    std::vector<Vertex> vertices;
+    vertices.push_back({ {-0.5f, -0.5f, 0.5f}, {texPos, texPos * 15}, {0.0f, 0.0f, 0.0f} });
+    vertices.push_back({ {0.5f, -0.5f, 0.5f}, {texPos * 2 , texPos * 15}, { 0.0f, 0.0f, 0.0f } });
+    vertices.push_back({ {0.5f,  0.5f, 0.5f}, {texPos * 2, texPos * 16}, {0.0f, 0.0f, 0.0f} });
+    vertices.push_back({ {-0.5f,  0.5f, 0.5f}, {texPos, texPos * 16}, {0.0f, 0.0f, 0.0f} });
 
-    va.AddBuffer(vb, vbl);
+    vertices.push_back({ {-0.5f, -0.5f, -0.5f}, {texPos * 2, texPos * 15}, {0.0f, 0.0f, 0.0f} });
+    vertices.push_back({ {0.5f, -0.5f, -0.5f}, {texPos, texPos * 15}, {0.0f, 0.0f, 0.0f} });
+    vertices.push_back({ {0.5f,  0.5f, -0.5f}, {texPos, texPos * 16}, {0.0f, 0.0f, 0.0f} });
+    vertices.push_back({ {-0.5f,  0.5f, -0.5f}, {texPos * 2, texPos * 16}, {0.0f, 0.0f, 0.0f} });
 
-    IndexBuffer ib(indices, sizeof(indices) / sizeof(unsigned int), GL_STATIC_DRAW);
+    vertices.push_back({ {-0.5f,  0.5f, 0.5f}, {texPos * 2, texPos * 15 }, { 0.0f, 0.0f, 0.0f } });
+    vertices.push_back({ {0.5f,  0.5f, 0.5f}, {texPos * 3, texPos * 15 }, { 0.0f, 0.0f, 0.0f } });
+    vertices.push_back({ {0.5f,  0.5f, -0.5f}, {texPos * 3, texPos * 16 }, { 0.0f, 0.0f, 0.0f } });
+    vertices.push_back({ {-0.5f,  0.5f, -0.5f}, {texPos * 2, texPos * 16 }, { 0.0f, 0.0f, 0.0f } });
+
+    vertices.push_back({ {-0.5f, -0.5f, 0.5f}, {0, texPos * 15}, {0.0f, 0.0f, 0.0f} });
+    vertices.push_back({ {0.5f, -0.5f, 0.5f}, {texPos, texPos * 15}, {0.0f, 0.0f, 0.0f} });
+    vertices.push_back({ {0.5f, -0.5f, -0.5f}, {texPos, texPos * 16}, {0.0f, 0.0f, 0.0f} });
+    vertices.push_back({ {-0.5f,  -0.5f, -0.5f}, {0, texPos * 16}, {0.0f, 0.0f, 0.0f} });
+
+    std::vector<GLuint> indices{
+                        0, 1, 2,
+                        2, 3, 0,
+                        1, 5, 6,
+                        6, 2, 1,
+                        5, 4, 7,
+                        7, 6, 5,
+                        4, 0, 3,
+                        3, 7, 4,
+                        8, 9, 10,
+                        10, 11, 8,
+                        12, 13, 14,
+                        14, 15, 12
+    };
+
+    Mesh testCube(vertices, indices);
 
     Camera camera(width, height, glm::vec3(0.0f, 0.0f, 3.0f));
 
@@ -126,7 +117,6 @@ int main(void)
     shader.SetUniform1i("u_Texture", 0);
     //shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.2f, 1.0f);
 
-    va.Bind();
 
     Renderer renderer;
 
@@ -144,6 +134,7 @@ int main(void)
     glm::vec3 translationB(1.0f, 0.0f, 0.0f);
     GLfloat m_ClearColor[] = { 0.729f, 0.976f, 1.0f, 1.0f };
 
+
     while (!glfwWindowShouldClose(window))
     {
         glClearColor(m_ClearColor[0], m_ClearColor[1], m_ClearColor[2], m_ClearColor[3]);
@@ -158,14 +149,15 @@ int main(void)
             glm::mat4 model = glm::translate(glm::mat4(1.0f), translationA);
             glm::mat4 mvp = camera.CalcCameraMatrix(45.0f, 0.1f, 100.0f) * model;
             shader.SetUniformMat4f("u_MVP", mvp);
-            renderer.Draw(va, ib, shader);
+            renderer.Draw(testCube.GetVertexArray(), testCube.GetIndexBuffer(), shader);
         }
 
         {
             glm::mat4 model = glm::translate(glm::mat4(1.0f), translationB);
             glm::mat4 mvp = camera.CalcCameraMatrix(45.0f, 0.1f, 100.0f) * model;
             shader.SetUniformMat4f("u_MVP", mvp);
-            renderer.Draw(va, ib, shader);
+            renderer.Draw(testCube.GetVertexArray(), testCube.GetIndexBuffer(), shader);
+
         }
 
         {
