@@ -8,6 +8,7 @@
 #include "Renderer.h"
 #include "Texture.h"
 #include "Mesh.h"
+#include "BlockMesh.h"
 
 #include "Camera.h"
 
@@ -63,57 +64,12 @@ int main(void)
     //glFrontFace(GL_CW);
     //glCullFace(GL_FRONT);
 
-    float texPos = 1.0f / 16.0f;
 
-    std::vector<Vertex> vertices;
-    vertices.push_back({ {-0.5f, -0.5f, 0.5f}, {texPos, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-    vertices.push_back({ {0.5f, -0.5f, 0.5f}, {texPos * 2 , texPos * 15}, { 0.0f, 0.0f, 0.0f } });
-    vertices.push_back({ {0.5f,  0.5f, 0.5f}, {texPos * 2, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-    vertices.push_back({ {-0.5f,  0.5f, 0.5f}, {texPos, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-
-    vertices.push_back({ {-0.5f, -0.5f, -0.5f}, {texPos * 2, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-    vertices.push_back({ {0.5f, -0.5f, -0.5f}, {texPos, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-    vertices.push_back({ {0.5f,  0.5f, -0.5f}, {texPos, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-    vertices.push_back({ {-0.5f,  0.5f, -0.5f}, {texPos * 2, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-
-    vertices.push_back({ {-0.5f,  0.5f, 0.5f}, {texPos * 2, texPos * 15 }, { 0.0f, 0.0f, 0.0f } });
-    vertices.push_back({ {0.5f,  0.5f, 0.5f}, {texPos * 3, texPos * 15 }, { 0.0f, 0.0f, 0.0f } });
-    vertices.push_back({ {0.5f,  0.5f, -0.5f}, {texPos * 3, texPos * 16 }, { 0.0f, 0.0f, 0.0f } });
-    vertices.push_back({ {-0.5f,  0.5f, -0.5f}, {texPos * 2, texPos * 16 }, { 0.0f, 0.0f, 0.0f } });
-
-    vertices.push_back({ {-0.5f, -0.5f, 0.5f}, {0, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-    vertices.push_back({ {0.5f, -0.5f, 0.5f}, {texPos, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-    vertices.push_back({ {0.5f, -0.5f, -0.5f}, {texPos, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-    vertices.push_back({ {-0.5f,  -0.5f, -0.5f}, {0, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-
-    std::vector<GLuint> indices{
-                        0, 1, 2,
-                        2, 3, 0,
-                        1, 5, 6,
-                        6, 2, 1,
-                        5, 4, 7,
-                        7, 6, 5,
-                        4, 0, 3,
-                        3, 7, 4,
-                        8, 9, 10,
-                        10, 11, 8,
-                        12, 13, 14,
-                        14, 15, 12
-    };
-
-    Mesh testCube(vertices, indices);
+    BlockMesh block(BlockType::GRASS);
+    block.Bind();
 
     Camera camera(width, height, glm::vec3(0.0f, 0.0f, 3.0f));
-
-    Shader shader("res/shaders/Basic.shader");
-    shader.Bind();
-
-    Texture texture("res/textures/texture_pack.png");
-    texture.Bind();
-    shader.SetUniform1i("u_Texture", 0);
-    //shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.2f, 1.0f);
-
-
+ 
     Renderer renderer;
 
     const char* glsl_version = "#version 150";
@@ -126,8 +82,7 @@ int main(void)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
-    glm::vec3 translationA(0.0f, 0.0f, 0.0f);
-    glm::vec3 translationB(1.0f, 0.0f, 0.0f);
+
     GLfloat m_ClearColor[] = { 0.729f, 0.976f, 1.0f, 1.0f };
 
 
@@ -137,25 +92,38 @@ int main(void)
         renderer.Clear();
         camera.Inputs(window);
 
+        /*
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+        */
 
         {
-            glm::mat4 model = glm::translate(glm::mat4(1.0f), translationA);
-            glm::mat4 mvp = camera.CalcCameraMatrix(45.0f, 0.1f, 100.0f) * model;
-            shader.SetUniformMat4f("u_MVP", mvp);
-            renderer.Draw(testCube.GetVertexArray(), testCube.GetIndexBuffer(), shader);
+            glm::mat4 vp = camera.CalcCameraMatrix(45.0f, 0.1f, 100.0f);
+
+            float x = 0.0f;
+            float y = 0.0f;
+            float z = 0.0f;
+
+            for (size_t i = 0; i < 10; i++)
+            {
+                x = 0.0f;
+                for (size_t i = 0; i < 10; i++)
+                {
+                    glm::vec3 translation(x, y, z);
+
+                    glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
+                    glm::mat4 mvp = vp * model;
+                    block.GetMaterial().GetShader().SetUniformMat4f("u_MVP", mvp);
+                    renderer.DrawBlock(block);
+                    x++;
+                }
+                z++;
+            }
+
         }
 
-        {
-            glm::mat4 model = glm::translate(glm::mat4(1.0f), translationB);
-            glm::mat4 mvp = camera.CalcCameraMatrix(45.0f, 0.1f, 100.0f) * model;
-            shader.SetUniformMat4f("u_MVP", mvp);
-            renderer.Draw(testCube.GetVertexArray(), testCube.GetIndexBuffer(), shader);
-
-        }
-
+        /*
         {
             ImGui::Begin("Modifications");
 
@@ -185,6 +153,7 @@ int main(void)
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        */
 
         glfwSwapBuffers(window);
         glfwPollEvents();

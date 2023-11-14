@@ -6,16 +6,16 @@
 class Material
 {
 public:
-	Material(Shader shader, Texture texture);
+	Material(std::string shader, std::string texture);
 	~Material();
 
 	void Bind() const;
 	void Unbind() const;
 
-	inline Shader& GetShader() { return m_Shader; }
-	inline Texture& GetTexture() { return m_Texture; }
+	inline Shader& GetShader() const { return *m_Shader; }
+	inline Texture& GetTexture() const { return *m_Texture; }
 
 private:
-	Shader m_Shader;
-	Texture m_Texture;
+	std::unique_ptr<Shader> m_Shader;
+	std::unique_ptr <Texture> m_Texture;
 };

@@ -1,8 +1,9 @@
 #include "Material.h"
 
-Material::Material(Shader shader, Texture texture)
-	: m_Shader(shader), m_Texture(texture)
+Material::Material(std::string shader, std::string texture)
 {
+	m_Shader = std::make_unique<Shader>(shader);
+	m_Texture = std::make_unique<Texture>(texture);
 }
 
 Material::~Material()
@@ -11,12 +12,12 @@ Material::~Material()
 
 void Material::Bind() const
 {
-	m_Shader.Bind();
-	m_Texture.Bind();
+	m_Shader->Bind();
+	m_Texture->Bind();
 }
 
 void Material::Unbind() const
 {
-	m_Shader.Unbind();
-	m_Texture.Unbind();
+	m_Shader->Unbind();
+	m_Texture->Unbind();
 }
