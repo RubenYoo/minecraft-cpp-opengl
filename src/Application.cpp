@@ -65,8 +65,9 @@ int main(void)
     //glCullFace(GL_FRONT);
 
 
-    BlockMesh block(BlockType::GRASS);
-    block.Bind();
+    BlockMesh stoneBlock(BlockType::STONE);
+    BlockMesh grassBlock(BlockType::GRASS);
+    BlockMesh dirtBlock(BlockType::DIRT);
 
     Camera camera(width, height, glm::vec3(0.0f, 0.0f, 3.0f));
  
@@ -99,6 +100,7 @@ int main(void)
         */
 
         {
+            stoneBlock.Bind();
             glm::mat4 vp = camera.CalcCameraMatrix(45.0f, 0.1f, 100.0f);
 
             float x = 0.0f;
@@ -107,18 +109,75 @@ int main(void)
 
             for (size_t i = 0; i < 10; i++)
             {
-                x = 0.0f;
+                z = 0.0f;
+
                 for (size_t i = 0; i < 10; i++)
                 {
-                    glm::vec3 translation(x, y, z);
+                    x = 0.0f;
 
-                    glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
-                    glm::mat4 mvp = vp * model;
-                    block.GetMaterial().GetShader().SetUniformMat4f("u_MVP", mvp);
-                    renderer.DrawBlock(block);
-                    x++;
+                    for (size_t i = 0; i < 10; i++)
+                    {
+                        glm::vec3 translation(x, y, z);
+
+                        glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
+                        glm::mat4 mvp = vp * model;
+                        stoneBlock.GetMaterial().GetShader().SetUniformMat4f("u_MVP", mvp);
+                        renderer.DrawBlock(stoneBlock);
+                        x++;
+                    }
+                    z++;
                 }
-                z++;
+                y++;
+            }
+
+            dirtBlock.Bind();
+
+            for (size_t i = 0; i < 3; i++)
+            {
+                z = 0.0f;
+
+                for (size_t i = 0; i < 10; i++)
+                {
+                    x = 0.0f;
+
+                    for (size_t i = 0; i < 10; i++)
+                    {
+                        glm::vec3 translation(x, y, z);
+
+                        glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
+                        glm::mat4 mvp = vp * model;
+                        dirtBlock.GetMaterial().GetShader().SetUniformMat4f("u_MVP", mvp);
+                        renderer.DrawBlock(dirtBlock);
+                        x++;
+                    }
+                    z++;
+                }
+                y++;
+            }
+
+            grassBlock.Bind();
+
+            for (size_t i = 0; i < 1; i++)
+            {
+                z = 0.0f;
+
+                for (size_t i = 0; i < 10; i++)
+                {
+                    x = 0.0f;
+
+                    for (size_t i = 0; i < 10; i++)
+                    {
+                        glm::vec3 translation(x, y, z);
+
+                        glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
+                        glm::mat4 mvp = vp * model;
+                        grassBlock.GetMaterial().GetShader().SetUniformMat4f("u_MVP", mvp);
+                        renderer.DrawBlock(grassBlock);
+                        x++;
+                    }
+                    z++;
+                }
+                y++;
             }
 
         }
