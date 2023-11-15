@@ -20,6 +20,9 @@ public:
     Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices);
     ~Mesh();
 	
+    void Bind() const;
+    void Unbind() const;
+
     inline const VertexArray& GetVertexArray() const { return *m_VAO; }
     inline const IndexBuffer& GetIndexBuffer() const { return *m_EBO; }
 

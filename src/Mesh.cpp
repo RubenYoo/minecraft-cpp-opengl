@@ -21,3 +21,17 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices)
 Mesh::~Mesh()
 {
 }
+
+void Mesh::Bind() const
+{
+	m_VAO->Bind();
+	m_VBO->Bind();
+	m_EBO->Bind();
+}
+
+void Mesh::Unbind() const
+{
+	m_VAO->Unbind();
+	m_VBO->Unbind();
+	m_EBO->Unbind();
+}

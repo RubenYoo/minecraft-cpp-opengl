@@ -4,11 +4,7 @@
 #include <iostream>
 
 #include "openGL/GLDebugMessageCallback.h"
-#include "Shader.h"
 #include "Renderer.h"
-#include "Texture.h"
-#include "Mesh.h"
-#include "BlockMesh.h"
 
 #include "Camera.h"
 
@@ -60,9 +56,9 @@ int main(void)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_CULL_FACE);
-    //glFrontFace(GL_CW);
-    //glCullFace(GL_FRONT);
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CCW);
+    glCullFace(GL_BACK);
 
 
     BlockMesh stoneBlock(BlockType::STONE);
@@ -179,6 +175,14 @@ int main(void)
                 }
                 y++;
             }
+
+            y = 30.0f;
+            glm::vec3 translation(x, y, z);
+
+            glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
+            glm::mat4 mvp = vp * model;
+            grassBlock.GetMaterial().GetShader().SetUniformMat4f("u_MVP", mvp);
+            renderer.DrawBlock(grassBlock);
 
         }
 

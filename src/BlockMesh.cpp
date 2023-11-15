@@ -45,8 +45,8 @@ BlockMesh::BlockMesh(BlockType blockType)
                             3, 7, 4,
                             8, 9, 10,
                             10, 11, 8,
-                            12, 13, 14,
-                            14, 15, 12
+                            13, 12, 15,
+                            15, 14, 13
         };
 
         m_Mesh = std::make_unique<Mesh>(vertices, indices);
@@ -89,8 +89,8 @@ BlockMesh::BlockMesh(BlockType blockType)
                             3, 7, 4,
                             8, 9, 10,
                             10, 11, 8,
-                            12, 13, 14,
-                            14, 15, 12
+                            13, 12, 15,
+                            15, 14, 13
         };
 
         m_Mesh = std::make_unique<Mesh>(vertices, indices);
@@ -132,8 +132,8 @@ BlockMesh::BlockMesh(BlockType blockType)
                             3, 7, 4,
                             8, 9, 10,
                             10, 11, 8,
-                            12, 13, 14,
-                            14, 15, 12
+                            13, 12, 15,
+                            15, 14, 13
         };
 
         m_Mesh = std::make_unique<Mesh>(vertices, indices);
@@ -153,10 +153,12 @@ BlockMesh::~BlockMesh()
 
 void BlockMesh::Bind() const
 {
+    m_Mesh->Bind();
     m_Material->Bind();
 }
 
 void BlockMesh::Unbind() const
 {
+    m_Mesh->Unbind();
     m_Material->Unbind();
 }
