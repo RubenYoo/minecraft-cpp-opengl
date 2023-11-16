@@ -5,8 +5,8 @@
 
 #include "openGL/GLDebugMessageCallback.h"
 #include "Renderer.h"
-
 #include "Camera.h"
+#include "PickingTexture.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -79,14 +79,17 @@ int main(void)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
-
     GLfloat m_ClearColor[] = { 0.729f, 0.976f, 1.0f, 1.0f };
+
+    /**/
+    PickingTexture pickingTexture;
+    pickingTexture.Init(width, height);
+
+    /**/
 
 
     while (!glfwWindowShouldClose(window))
     {
-        glClearColor(m_ClearColor[0], m_ClearColor[1], m_ClearColor[2], m_ClearColor[3]);
-        renderer.Clear();
         camera.Inputs(window);
 
         /*
@@ -95,7 +98,75 @@ int main(void)
         ImGui::NewFrame();
         */
 
+        // Picking Phase
         {
+            pickingTexture.EnableWriting();
+            glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            renderer.Clear();
+
+            glm::mat4 vp = camera.CalcCameraMatrix(45.0f, 0.1f, 100.0f);
+
+            Shader pickShader("res/shaders/Picking.shader");
+            pickShader.Bind();
+
+            float x = 0.0f;
+            float y = 0.0f;
+            float z = 0.0f;
+
+
+            stoneBlock.BindMesh();
+
+            for (size_t i = 0; i < 10; i++)
+            {
+                glm::vec3 translation(x, y, z);
+
+                glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
+                glm::mat4 mvp = vp * model;
+
+                pickShader.SetUniformMat4f("gWVP", mvp);
+                pickShader.SetUniform1ui("gObjectIndex", i + 1);
+
+                renderer.DrawBlock(stoneBlock);
+                x++;
+            }
+
+
+            stoneBlock.Unbind();
+            pickShader.Unbind();
+            pickingTexture.DisableWriting();
+
+        }
+
+        // Checking Phase
+        {
+            PickingTexture::PixelInfo pixelInfo = pickingTexture.ReadPixel(width / 2, height / 2);
+            //pixelInfo.Print();
+
+        
+
+        // Cursor
+        
+        /*
+        float texPos = 1.0f / 16.0f;
+        std::vector<Vertex> vertices;
+
+        vertices.push_back({ {-0.5f, -0.5f, 0.5f}, {texPos, texPos * 15}, {0.0f, 0.0f, 0.0f} });
+        vertices.push_back({ {0.5f, -0.5f, 0.5f}, {texPos * 2 , texPos * 15}, { 0.0f, 0.0f, 0.0f } });
+        vertices.push_back({ {0.5f,  0.5f, 0.5f}, {texPos * 2, texPos * 16}, {0.0f, 0.0f, 0.0f} });
+        vertices.push_back({ {-0.5f,  0.5f, 0.5f}, {texPos, texPos * 16}, {0.0f, 0.0f, 0.0f} });
+
+        vertices.push_back({ {-0.5f, -0.5f, -0.5f}, {texPos * 2, texPos * 15}, {0.0f, 0.0f, 0.0f} });
+        vertices.push_back({ {0.5f, -0.5f, -0.5f}, {texPos, texPos * 15}, {0.0f, 0.0f, 0.0f} });
+        vertices.push_back({ {0.5f,  0.5f, -0.5f}, {texPos, texPos * 16}, {0.0f, 0.0f, 0.0f} });
+        vertices.push_back({ {-0.5f,  0.5f, -0.5f}, {texPos * 2, texPos * 16}, {0.0f, 0.0f, 0.0f} });
+        */
+        
+
+        // Render Phase
+        
+            glClearColor(m_ClearColor[0], m_ClearColor[1], m_ClearColor[2], m_ClearColor[3]);
+            renderer.Clear();
+
             stoneBlock.Bind();
             glm::mat4 vp = camera.CalcCameraMatrix(45.0f, 0.1f, 100.0f);
 
@@ -103,6 +174,28 @@ int main(void)
             float y = 0.0f;
             float z = 0.0f;
 
+            for (size_t i = 0; i < 10; i++)
+            {
+                glm::vec3 translation(x, y, z);
+
+                glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
+                glm::mat4 mvp = vp * model;
+                stoneBlock.GetMaterial().GetShader().SetUniformMat4f("u_MVP", mvp);
+               
+                if (pixelInfo.ObjectID != 0)
+                    if (pixelInfo.ObjectID - 1 == i)
+                        stoneBlock.GetMaterial().GetTexture().Unbind();
+                    else
+                        stoneBlock.GetMaterial().GetTexture().Bind();
+                else
+                    stoneBlock.GetMaterial().GetTexture().Bind();
+
+                    
+                renderer.DrawBlock(stoneBlock);
+                x++;
+            }
+
+            /*
             for (size_t i = 0; i < 10; i++)
             {
                 z = 0.0f;
@@ -184,6 +277,11 @@ int main(void)
             grassBlock.GetMaterial().GetShader().SetUniformMat4f("u_MVP", mvp);
             renderer.DrawBlock(grassBlock);
 
+            dirtBlock.Unbind();
+            grassBlock.Unbind();
+            */
+
+            stoneBlock.Unbind();
         }
 
         /*

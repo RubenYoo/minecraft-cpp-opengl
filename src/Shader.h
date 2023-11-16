@@ -20,6 +20,7 @@ public:
 
 	void SetUniform4f(const std::string& name, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3);
 	void SetUniform1i(const std::string& name, GLint value);
+	void SetUniform1ui(const std::string& name, GLuint value);
 	void SetUniformMat4f(const std::string& name, const glm::mat4& matrix);
 
 private:

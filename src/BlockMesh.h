@@ -21,6 +21,8 @@ public:
 
 	void Bind() const;
 	void Unbind() const;
+	void BindMesh() const;
+	void BindMaterial() const;
 
 	inline const Material& GetMaterial() const { return *m_Material; }
 	inline const Mesh& GetMesh() const { return *m_Mesh; }

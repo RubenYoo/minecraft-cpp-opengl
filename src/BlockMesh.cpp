@@ -162,3 +162,13 @@ void BlockMesh::Unbind() const
     m_Mesh->Unbind();
     m_Material->Unbind();
 }
+
+void BlockMesh::BindMesh() const
+{
+    m_Mesh->Bind();
+}
+
+void BlockMesh::BindMaterial() const
+{
+    m_Material->Bind();
+}

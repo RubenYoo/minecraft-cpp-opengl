@@ -48,6 +48,11 @@ ShaderProgramSource Shader::ParseShader(const std::string& filepath)
     return ShaderProgramSource{ ss[0].str(), ss[1].str() };
 }
 
+void Shader::SetUniform1ui(const std::string& name, GLuint value)
+{
+    glUniform1ui(GetUniformLocation(name), value);
+}
+
 void Shader::SetUniformMat4f(const std::string& name, const glm::mat4& matrix)
 {
     glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]);

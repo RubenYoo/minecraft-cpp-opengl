@@ -87,6 +87,9 @@
     <ClCompile Include="src\BlockMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\PickingTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
@@ -498,6 +501,7 @@
     <None Include="src\glm\gtx\wrap.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="res\shaders\Picking.Shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\openGL\GLDebugMessageCallback.h">
@@ -1413,6 +1417,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\BlockMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PickingTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
