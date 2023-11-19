@@ -60,7 +60,7 @@ void Camera::Inputs(GLFWwindow* window)
     // Handles key inputs
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) // Z
     {
-        m_Position += m_Speed * m_Orientation;
+        m_Position += m_Speed * glm::normalize(glm::vec3(m_Orientation.x, 0.0f, m_Orientation.z));
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) // Q
     {
@@ -68,7 +68,7 @@ void Camera::Inputs(GLFWwindow* window)
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) // S
     {
-        m_Position -= m_Speed * m_Orientation;
+        m_Position -= m_Speed * glm::normalize(glm::vec3(m_Orientation.x, 0.0f, m_Orientation.z));
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) // D
     {
