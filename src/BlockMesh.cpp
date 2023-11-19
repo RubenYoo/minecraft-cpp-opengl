@@ -3,146 +3,94 @@
 BlockMesh::BlockMesh(BlockType blockType)
 	: m_BlockType(blockType)
 {
-    float texPos = 1.0f / 16.0f;
 
     std::vector<Vertex> vertices;
+    float texPos = 1.0f / 16.0f;
+    float sideX(0.0f), upX(0.0f), bottomX(0.0f);
+    float sideY(0.0f), upY(0.0f), bottomY(0.0f);
 
     switch (blockType)
     {
     case BlockType::GRASS:
     {
-        //sides
-        vertices.push_back({ {-0.5f, -0.5f, 0.5f}, {texPos, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {0.5f, -0.5f, 0.5f}, {texPos * 2 , texPos * 15}, { 0.0f, 0.0f, 0.0f } });
-        vertices.push_back({ {0.5f,  0.5f, 0.5f}, {texPos * 2, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {-0.5f,  0.5f, 0.5f}, {texPos, texPos * 16}, {0.0f, 0.0f, 0.0f} });
+        sideX = texPos;
+        sideY = texPos * 15;
 
-        vertices.push_back({ {-0.5f, -0.5f, -0.5f}, {texPos * 2, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {0.5f, -0.5f, -0.5f}, {texPos, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {0.5f,  0.5f, -0.5f}, {texPos, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {-0.5f,  0.5f, -0.5f}, {texPos * 2, texPos * 16}, {0.0f, 0.0f, 0.0f} });
+        upX = texPos * 2;
+        upY = texPos * 15;
 
-        //front
-        vertices.push_back({ {-0.5f,  0.5f, 0.5f}, {texPos * 2, texPos * 15 }, { 0.0f, 0.0f, 0.0f } });
-        vertices.push_back({ {0.5f,  0.5f, 0.5f}, {texPos * 3, texPos * 15 }, { 0.0f, 0.0f, 0.0f } });
-        vertices.push_back({ {0.5f,  0.5f, -0.5f}, {texPos * 3, texPos * 16 }, { 0.0f, 0.0f, 0.0f } });
-        vertices.push_back({ {-0.5f,  0.5f, -0.5f}, {texPos * 2, texPos * 16 }, { 0.0f, 0.0f, 0.0f } });
-
-        //bottom
-        vertices.push_back({ {-0.5f, -0.5f, 0.5f}, {0, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {0.5f, -0.5f, 0.5f}, {texPos, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {0.5f, -0.5f, -0.5f}, {texPos, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {-0.5f,  -0.5f, -0.5f}, {0, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-
-        std::vector<GLuint> indices{
-                            0, 1, 2,
-                            2, 3, 0,
-                            1, 5, 6,
-                            6, 2, 1,
-                            5, 4, 7,
-                            7, 6, 5,
-                            4, 0, 3,
-                            3, 7, 4,
-                            8, 9, 10,
-                            10, 11, 8,
-                            13, 12, 15,
-                            15, 14, 13
-        };
-
-        m_Mesh = std::make_unique<Mesh>(vertices, indices);
-
+        bottomX = 0.0f;
+        bottomY = texPos * 15;
     }
         break;
     case BlockType::STONE:
     {
-        //sides
-        vertices.push_back({ {-0.5f, -0.5f, 0.5f}, {texPos * 4, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {0.5f, -0.5f, 0.5f}, {texPos * 5 , texPos * 15}, { 0.0f, 0.0f, 0.0f } });
-        vertices.push_back({ {0.5f,  0.5f, 0.5f}, {texPos * 5, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {-0.5f,  0.5f, 0.5f}, {texPos * 4, texPos * 16}, {0.0f, 0.0f, 0.0f} });
+        sideX = texPos * 4;
+        sideY = texPos * 15;
 
-        vertices.push_back({ {-0.5f, -0.5f, -0.5f}, {texPos * 5, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {0.5f, -0.5f, -0.5f}, {texPos * 4, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {0.5f,  0.5f, -0.5f}, {texPos * 4, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {-0.5f,  0.5f, -0.5f}, {texPos * 5, texPos * 16}, {0.0f, 0.0f, 0.0f} });
+        upX = texPos * 4;
+        upY = texPos * 15;
 
-        //front
-        vertices.push_back({ {-0.5f,  0.5f, 0.5f}, {texPos * 4, texPos * 15 }, { 0.0f, 0.0f, 0.0f } });
-        vertices.push_back({ {0.5f,  0.5f, 0.5f}, {texPos * 5, texPos * 15 }, { 0.0f, 0.0f, 0.0f } });
-        vertices.push_back({ {0.5f,  0.5f, -0.5f}, {texPos * 5, texPos * 16 }, { 0.0f, 0.0f, 0.0f } });
-        vertices.push_back({ {-0.5f,  0.5f, -0.5f}, {texPos * 4, texPos * 16 }, { 0.0f, 0.0f, 0.0f } });
-
-        //bottom
-        vertices.push_back({ {-0.5f, -0.5f, 0.5f}, {texPos * 4, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {0.5f, -0.5f, 0.5f}, {texPos * 5, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {0.5f, -0.5f, -0.5f}, {texPos * 5, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {-0.5f,  -0.5f, -0.5f}, {texPos * 4, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-
-        std::vector<GLuint> indices{
-                            0, 1, 2,
-                            2, 3, 0,
-                            1, 5, 6,
-                            6, 2, 1,
-                            5, 4, 7,
-                            7, 6, 5,
-                            4, 0, 3,
-                            3, 7, 4,
-                            8, 9, 10,
-                            10, 11, 8,
-                            13, 12, 15,
-                            15, 14, 13
-        };
-
-        m_Mesh = std::make_unique<Mesh>(vertices, indices);
+        bottomX = texPos * 4;
+        bottomY = texPos * 15;
     }
         break;
     case BlockType::DIRT:
     {
-        //sides
-        vertices.push_back({ {-0.5f, -0.5f, 0.5f}, {0, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {0.5f, -0.5f, 0.5f}, {texPos , texPos * 15}, { 0.0f, 0.0f, 0.0f } });
-        vertices.push_back({ {0.5f,  0.5f, 0.5f}, {texPos, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {-0.5f,  0.5f, 0.5f}, {0, texPos * 16}, {0.0f, 0.0f, 0.0f} });
+        sideX = 0.0f;
+        sideY = texPos * 15;
 
-        vertices.push_back({ {-0.5f, -0.5f, -0.5f}, {texPos, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {0.5f, -0.5f, -0.5f}, {0, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {0.5f,  0.5f, -0.5f}, {0, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {-0.5f,  0.5f, -0.5f}, {texPos, texPos * 16}, {0.0f, 0.0f, 0.0f} });
+        upX = 0.0f;
+        upY = texPos * 15;
 
-        //front
-        vertices.push_back({ {-0.5f,  0.5f, 0.5f}, {0, texPos * 15 }, { 0.0f, 0.0f, 0.0f } });
-        vertices.push_back({ {0.5f,  0.5f, 0.5f}, {texPos, texPos * 15 }, { 0.0f, 0.0f, 0.0f } });
-        vertices.push_back({ {0.5f,  0.5f, -0.5f}, {texPos, texPos * 16 }, { 0.0f, 0.0f, 0.0f } });
-        vertices.push_back({ {-0.5f,  0.5f, -0.5f}, {0, texPos * 16 }, { 0.0f, 0.0f, 0.0f } });
-
-        //bottom
-        vertices.push_back({ {-0.5f, -0.5f, 0.5f}, {0, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {0.5f, -0.5f, 0.5f}, {texPos, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {0.5f, -0.5f, -0.5f}, {texPos, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-        vertices.push_back({ {-0.5f,  -0.5f, -0.5f}, {0, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-
-        std::vector<GLuint> indices{
-                            0, 1, 2,
-                            2, 3, 0,
-                            1, 5, 6,
-                            6, 2, 1,
-                            5, 4, 7,
-                            7, 6, 5,
-                            4, 0, 3,
-                            3, 7, 4,
-                            8, 9, 10,
-                            10, 11, 8,
-                            13, 12, 15,
-                            15, 14, 13
-        };
-
-        m_Mesh = std::make_unique<Mesh>(vertices, indices);
+        bottomX = 0.0f;
+        bottomY = texPos * 15;
     }
         break;
     default:
         break;
     }
 
+
+    // SIDE FACE
+    vertices.push_back({ {0.0f, 0.0f, 1.0f}, {sideX, sideY}, {0.0f, 0.0f, 0.0f} });
+    vertices.push_back({ {1.0f, 0.0f, 1.0f}, {sideX + texPos , sideY}, {0.0f, 0.0f, 0.0f} });
+    vertices.push_back({ {1.0f, 1.0f, 1.0f}, {sideX + texPos, sideY + texPos}, {0.0f, 0.0f, 0.0f} });
+    vertices.push_back({ {0.0f, 1.0f, 1.0f}, {sideX, sideY + texPos}, {0.0f, 0.0f, 0.0f} });
+
+    vertices.push_back({ {0.0f, 0.0f, 0.0f}, {sideX + texPos, sideY}, {0.0f, 0.0f, 0.0f} });
+    vertices.push_back({ {1.0f, 0.0f, 0.0f}, {sideX, sideY}, {0.0f, 0.0f, 0.0f} });
+    vertices.push_back({ {1.0f, 1.0f, 0.0f}, {sideX, sideY + texPos}, {0.0f, 0.0f, 0.0f} });
+    vertices.push_back({ {0.0f, 1.0f, 0.0f}, {sideX + texPos, sideY + texPos}, {0.0f, 0.0f, 0.0f} });
+
+    // UP FACE
+    vertices.push_back({ {0.0f, 1.0f, 1.0f}, {upX, upY}, {0.0f, 0.0f, 0.0f} });
+    vertices.push_back({ {1.0f, 1.0f, 1.0f}, {upX + texPos, upY}, {0.0f, 0.0f, 0.0f} });
+    vertices.push_back({ {1.0f, 1.0f, 0.0f}, {upX + texPos, upY + texPos}, {0.0f, 0.0f, 0.0f} });
+    vertices.push_back({ {0.0f, 1.0f, 0.0f}, {upX, upY + texPos}, {0.0f, 0.0f, 0.0f} });
+
+    // BOTTOM FACE
+    vertices.push_back({ {0.0f, 0.0f, 1.0f}, {bottomX, bottomY}, {0.0f, 0.0f, 0.0f} });
+    vertices.push_back({ {1.0f, 0.0f, 1.0f}, {bottomX + texPos, bottomY}, {0.0f, 0.0f, 0.0f} });
+    vertices.push_back({ {1.0f, 0.0f, 0.0f}, {bottomX + texPos, bottomY + texPos}, {0.0f, 0.0f, 0.0f} });
+    vertices.push_back({ {0.0f, 0.0f, 0.0f}, {bottomX, bottomY + texPos}, {0.0f, 0.0f, 0.0f} });
+
+    std::vector<GLuint> indices{
+                        0, 1, 2,
+                        2, 3, 0,
+                        1, 5, 6,
+                        6, 2, 1,
+                        5, 4, 7,
+                        7, 6, 5,
+                        4, 0, 3,
+                        3, 7, 4,
+                        8, 9, 10,
+                        10, 11, 8,
+                        13, 12, 15,
+                        15, 14, 13
+    };
+
+    m_Mesh = std::make_unique<Mesh>(vertices, indices);
 
     m_Material = std::make_unique<Material>("res/shaders/Basic.shader", "res/textures/texture_pack.png");
 }

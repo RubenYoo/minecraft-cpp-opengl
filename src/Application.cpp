@@ -116,7 +116,7 @@ int main(void)
 
             stoneBlock.BindMesh();
 
-            for (size_t i = 0; i < 10; i++)
+            for (GLuint i = 0; i < 10; i++)
             {
                 glm::vec3 translation(x, y, z);
 
