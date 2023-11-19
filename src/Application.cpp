@@ -152,15 +152,15 @@ int main(void)
             float texPos = 1.0f / 16.0f;
             std::vector<Vertex> vertices;
 
-            vertices.push_back({ {935.0f, 535.0f, 0.0f}, {54.0f / 256.0f, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-            vertices.push_back({ {985.0f, 535.0f, 0.0f}, {58.0f / 256.0f ,texPos * 15}, {0.0f, 0.0f, 0.0f}});
-            vertices.push_back({ {985.0f, 545.0f, 0.0f}, {58.0f / 256.0f, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-            vertices.push_back({ {935.0f, 545.0f, 0.0f}, {54.0f / 256.0f, texPos * 16}, {0.0f, 0.0f, 0.0f} });
+            vertices.push_back({ {935.0f, 535.0f, 1.0f}, {54.0f / 256.0f, texPos * 15}, {0.0f, 0.0f, 0.0f} });
+            vertices.push_back({ {985.0f, 535.0f, 1.0f}, {58.0f / 256.0f ,texPos * 15}, {0.0f, 0.0f, 0.0f}});
+            vertices.push_back({ {985.0f, 545.0f, 1.0f}, {58.0f / 256.0f, texPos * 16}, {0.0f, 0.0f, 0.0f} });
+            vertices.push_back({ {935.0f, 545.0f, 1.0f}, {54.0f / 256.0f, texPos * 16}, {0.0f, 0.0f, 0.0f} });
 
-            vertices.push_back({ {955.0f, 515.0f, 0.0f}, {texPos * 3, 246.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
-            vertices.push_back({ {965.0f, 515.0f, 0.0f}, {texPos * 4, 246.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
-            vertices.push_back({ {965.0f, 565.0f, 0.0f}, {texPos * 4, 250.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
-            vertices.push_back({ {955.0f, 565.0f, 0.0f}, {texPos * 3, 250.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
+            vertices.push_back({ {955.0f, 515.0f, 1.0f}, {texPos * 3, 246.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
+            vertices.push_back({ {965.0f, 515.0f, 1.0f}, {texPos * 4, 246.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
+            vertices.push_back({ {965.0f, 565.0f, 1.0f}, {texPos * 4, 250.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
+            vertices.push_back({ {955.0f, 565.0f, 1.0f}, {texPos * 3, 250.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
 
 
             std::vector<GLuint> indices = {
