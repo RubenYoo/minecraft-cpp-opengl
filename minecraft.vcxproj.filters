@@ -90,6 +90,9 @@
     <ClCompile Include="src\PickingTexture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Context.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
@@ -1420,6 +1423,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\PickingTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Context.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

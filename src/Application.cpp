@@ -1,9 +1,5 @@
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
+#include "Context.h"
 #include <iostream>
-
-#include "openGL/GLDebugMessageCallback.h"
 #include "Renderer.h"
 #include "Camera.h"
 #include "PickingTexture.h"
@@ -11,86 +7,29 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
 #include "tests/TestClearColor.h"
 
-#define width 1920
-#define height 1080
+constexpr auto WIDTH = 1920;
+constexpr auto HEIGHT = 1080;
 
-int main(void)
+int main()
 {
-    GLFWwindow* window;
-
-    /* Initialize the library */
-    if (!glfwInit())
-        return -1;
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(width, height, "Minecraft", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        return -1;
-    }
-
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
-
-    //glfwSwapInterval(1);
-
-    if (glewInit() != GLEW_OK)
-        std::cout << "Error: Glew was not init" << std::endl;
-
-    glEnable(GL_DEBUG_OUTPUT);
-    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-    glDebugMessageCallback(GLDebugMessageCallback, nullptr);
-
-    std::cout << glGetString(GL_VERSION) << std::endl;
-
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glFrontFace(GL_CCW);
-    glCullFace(GL_BACK);
-
+    Context context(WIDTH, HEIGHT, "Minecraft");
 
     BlockMesh stoneBlock(BlockType::STONE);
     BlockMesh grassBlock(BlockType::GRASS);
     BlockMesh dirtBlock(BlockType::DIRT);
 
-    Camera camera(width, height, glm::vec3(0.0f, 0.0f, 3.0f));
- 
+    Camera camera(WIDTH, HEIGHT, glm::vec3(0.0f, 0.0f, 3.0f));
     Renderer renderer;
 
-    const char* glsl_version = "#version 150";
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
-    ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init(glsl_version);
-
-    GLfloat m_ClearColor[] = { 0.729f, 0.976f, 1.0f, 1.0f };
-
-    /**/
     PickingTexture pickingTexture;
-    pickingTexture.Init(width, height);
+    pickingTexture.Init(WIDTH, HEIGHT);
 
-    /**/
-
-
-    while (!glfwWindowShouldClose(window))
+    
+    while (!glfwWindowShouldClose(context.GetWindow()))
     {
-        camera.Inputs(window);
+        camera.Inputs(context.GetWindow());
 
         /*
         ImGui_ImplOpenGL3_NewFrame();
@@ -139,11 +78,11 @@ int main(void)
 
         // Checking Phase
         {
-            PickingTexture::PixelInfo pixelInfo = pickingTexture.ReadPixel(width / 2, height / 2);
+            PickingTexture::PixelInfo pixelInfo = pickingTexture.ReadPixel(WIDTH / 2, HEIGHT / 2);
             //pixelInfo.Print();
 
 
-            glClearColor(m_ClearColor[0], m_ClearColor[1], m_ClearColor[2], m_ClearColor[3]);
+            glClearColor(0.729f, 0.976f, 1.0f, 1.0f);
             renderer.Clear();
         
 
@@ -172,7 +111,7 @@ int main(void)
 
             //glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 0.0f));
 
-            glm::mat4 projection = glm::ortho(0.0f, (float)width, 0.0f, (float)height, -1.0f, 1.0f);
+            glm::mat4 projection = glm::ortho(0.0f, (float)WIDTH, 0.0f, (float)HEIGHT, -1.0f, 1.0f);
             glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 15.0f, 0.0f));
             glm::mat4 mvp = projection *  model /* scale*/;
 
@@ -335,14 +274,9 @@ int main(void)
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         */
 
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(context.GetWindow());
         glfwPollEvents();
     }
 
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-
-    glfwTerminate();
     return 0;
 }
