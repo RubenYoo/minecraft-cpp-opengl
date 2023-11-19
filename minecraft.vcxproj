@@ -177,7 +177,8 @@
     <ClCompile Include="src\openGL\VertexBufferLayout.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\Basic.shader" />
+    <None Include="res\shaders\Block.shader" />
+    <None Include="res\shaders\Cursor.Shader" />
     <None Include="res\shaders\Picking.Shader" />
     <None Include="src\glm\detail\func_common.inl" />
     <None Include="src\glm\detail\func_common_simd.inl" />

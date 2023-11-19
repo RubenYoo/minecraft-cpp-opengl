@@ -102,15 +102,15 @@ int main()
             float texPos = 1.0f / 16.0f;
             std::vector<Vertex> vertices;
 
-            vertices.push_back({ {935.0f, 535.0f, 1.0f}, {54.0f / 256.0f, texPos * 15}, {0.0f, 0.0f, 0.0f} });
-            vertices.push_back({ {985.0f, 535.0f, 1.0f}, {58.0f / 256.0f ,texPos * 15}, {0.0f, 0.0f, 0.0f}});
-            vertices.push_back({ {985.0f, 545.0f, 1.0f}, {58.0f / 256.0f, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-            vertices.push_back({ {935.0f, 545.0f, 1.0f}, {54.0f / 256.0f, texPos * 16}, {0.0f, 0.0f, 0.0f} });
-
-            vertices.push_back({ {955.0f, 515.0f, 1.0f}, {texPos * 3, 246.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
-            vertices.push_back({ {965.0f, 515.0f, 1.0f}, {texPos * 4, 246.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
-            vertices.push_back({ {965.0f, 565.0f, 1.0f}, {texPos * 4, 250.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
-            vertices.push_back({ {955.0f, 565.0f, 1.0f}, {texPos * 3, 250.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
+            vertices.push_back({ {0.0f,  0.0f + 12.0f, 1.0f}, {48.0f / 256.0f, 246.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
+            vertices.push_back({ {32.0f, 0.0f + 12.0f, 1.0f}, {64.0f / 256.0f ,246.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
+            vertices.push_back({ {32.0f, 8.0f + 12.0f, 1.0f}, {64.0f / 256.0f, 250.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
+            vertices.push_back({ {0.0f,  8.0f + 12.0f, 1.0f}, {48.0f / 256.0f, 250.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
+                                                       
+            vertices.push_back({ {0.0f + 12.0f, 0.0f,  1.0f}, {54.0f / 256.0f, 240.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
+            vertices.push_back({ {8.0f + 12.0f, 0.0f,  1.0f}, {58.0f / 256.0f, 240.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
+            vertices.push_back({ {8.0f + 12.0f, 32.0f, 1.0f}, {58.0f / 256.0f, 256.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
+            vertices.push_back({ {0.0f + 12.0f, 32.0f, 1.0f}, {54.0f / 256.0f, 256.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
 
 
             std::vector<GLuint> indices = {
@@ -123,14 +123,14 @@ int main()
             //glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 0.0f));
 
             glm::mat4 projection = glm::ortho(0.0f, (float)WIDTH, 0.0f, (float)HEIGHT, -1.0f, 1.0f);
-            glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 15.0f, 0.0f));
-            glm::mat4 mvp = projection *  model /* scale*/;
+            glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3((float)WIDTH/2.0f - 16.0f, (float)HEIGHT/2.0f - 2.0f, 0.0f));
+            glm::mat4 mvp = projection *  model /* scale */ ;
 
             Mesh cursorMesh(vertices, indices);
             cursorMesh.Bind();
 
    
-            Material material("res/shaders/Basic.shader", "res/textures/texture_pack.png");
+            Material material("res/shaders/Cursor.shader", "res/textures/texture_pack.png");
             material.Bind();
             material.GetShader().SetUniformMat4f("u_MVP", mvp);
 

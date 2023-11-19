@@ -95,7 +95,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\Basic.shader" />
+    <None Include="res\shaders\Block.shader" />
     <None Include="src\glm\detail\func_common.inl">
       <Filter>Header Files</Filter>
     </None>
@@ -505,6 +505,7 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="res\shaders\Picking.Shader" />
+    <None Include="res\shaders\Cursor.Shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\openGL\GLDebugMessageCallback.h">
