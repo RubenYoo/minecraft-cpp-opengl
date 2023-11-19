@@ -1,5 +1,6 @@
 #include "Context.h"
 #include <iostream>
+#include <memory>
 #include "Renderer.h"
 #include "Camera.h"
 #include "PickingTexture.h"
@@ -14,7 +15,17 @@ constexpr auto HEIGHT = 1080;
 
 int main()
 {
-    Context context(WIDTH, HEIGHT, "Minecraft");
+    std::unique_ptr<Context> context = nullptr;
+
+    try
+    {
+        context = std::make_unique<Context>(WIDTH, HEIGHT, "Minecraft");
+    }
+    catch (const std::exception& ex)
+    {
+        std::cout << ex.what();
+    }
+    
 
     BlockMesh stoneBlock(BlockType::STONE);
     BlockMesh grassBlock(BlockType::GRASS);
@@ -27,9 +38,9 @@ int main()
     pickingTexture.Init(WIDTH, HEIGHT);
 
     
-    while (!glfwWindowShouldClose(context.GetWindow()))
+    while (!glfwWindowShouldClose(context->GetWindow()))
     {
-        camera.Inputs(context.GetWindow());
+        camera.Inputs(context->GetWindow());
 
         /*
         ImGui_ImplOpenGL3_NewFrame();
@@ -274,7 +285,7 @@ int main()
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         */
 
-        glfwSwapBuffers(context.GetWindow());
+        glfwSwapBuffers(context->GetWindow());
         glfwPollEvents();
     }
 
