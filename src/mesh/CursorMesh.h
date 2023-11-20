@@ -1,33 +1,21 @@
 #pragma once
 
-#include <glm/glm.hpp>
 #include "Mesh.h"
 #include "material/Material.h"
 
-enum class BlockType
-{
-	GRASS,
-	DIRT,
-	STONE
-};
-
-
-class BlockMesh
+class CursorMesh
 {
 public:
-	BlockMesh(BlockType blockType);
-	~BlockMesh();
+	CursorMesh();
+	~CursorMesh();
 
 	void Bind() const;
 	void Unbind() const;
-	void BindMesh() const;
-	void BindMaterial() const;
 
 	inline const Material& GetMaterial() const { return *m_Material; }
 	inline const Mesh& GetMesh() const { return *m_Mesh; }
 
 private:
-	BlockType m_BlockType;
 	std::unique_ptr<Mesh> m_Mesh;
 	std::unique_ptr<Material> m_Material;
 };

@@ -30,6 +30,17 @@ void Renderer::DrawBlock(const BlockMesh& blockMesh, glm::mat4 vp, glm::mat4 mod
 	Draw(blockMesh.GetMesh().GetVertexArray(), blockMesh.GetMesh().GetIndexBuffer(), blockMesh.GetMaterial().GetShader());
 }
 
+void Renderer::DrawCursor(const CursorMesh& cursorMesh, glm::mat4 vp, glm::mat4 model) const
+{
+	cursorMesh.Bind();
+
+	glm::mat4 mvp = vp * model;
+
+	cursorMesh.GetMaterial().GetShader().SetUniformMat4f("u_MVP", mvp);
+
+	Draw(cursorMesh.GetMesh().GetVertexArray(), cursorMesh.GetMesh().GetIndexBuffer(), cursorMesh.GetMaterial().GetShader());
+}
+
 void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const
 {
 	glDrawElements(GL_TRIANGLES, GLint(ib.GetCount()), GL_UNSIGNED_INT, nullptr);

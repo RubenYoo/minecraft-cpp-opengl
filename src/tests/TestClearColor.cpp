@@ -25,6 +25,13 @@ namespace test
 	void TestClearColor::OnImGuiRender()
 	{
 		ImGui::ColorEdit4("Clear color", m_ClearColor);
+
+        /*
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+        */
+
         /*
         {
             ImGui::Begin("Modifications");
