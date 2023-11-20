@@ -2,7 +2,7 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <unordered_map>
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 
 struct ShaderProgramSource {
 	std::string vertexShader;

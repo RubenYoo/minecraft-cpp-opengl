@@ -92,7 +92,7 @@ BlockMesh::BlockMesh(BlockType blockType)
 
     m_Mesh = std::make_unique<Mesh>(vertices, indices);
 
-    m_Material = std::make_unique<Material>("res/shaders/Block.shader", "res/textures/texture_pack.png");
+    m_Material = std::make_unique<Material>("assets/shaders/Block.shader", "assets/textures/texture_pack.png");
 }
 
 BlockMesh::~BlockMesh()

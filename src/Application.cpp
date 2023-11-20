@@ -1,12 +1,12 @@
 #include "Context.h"
 #include <iostream>
 #include <memory>
-#include "Renderer.h"
-#include "Camera.h"
-#include "PickingTexture.h"
+#include "renderer/Renderer.h"
+#include "camera/Camera.h"
+#include "picking/PickingTexture.h"
 
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "tests/TestClearColor.h"
 
@@ -56,7 +56,7 @@ int main()
 
             glm::mat4 vp = camera.CalcCameraMatrix(45.0f, 0.1f, 100.0f);
 
-            Shader pickShader("res/shaders/Picking.shader");
+            Shader pickShader("assets/shaders/Picking.shader");
             pickShader.Bind();
 
             float x = 0.0f;
@@ -73,10 +73,10 @@ int main()
                 glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
                 glm::mat4 mvp = vp * model;
 
-                pickShader.SetUniformMat4f("gWVP", mvp);
-                pickShader.SetUniform1ui("gObjectIndex", i + 1);
+                pickShader.SetUniformMat4f("u_MVP", mvp);
+                pickShader.SetUniform1ui("u_ObjectIndex", i + 1);
 
-                renderer.DrawBlock(stoneBlock);
+                //renderer.DrawBlock(stoneBlock);
                 x++;
             }
 
@@ -130,7 +130,7 @@ int main()
             cursorMesh.Bind();
 
    
-            Material material("res/shaders/Cursor.shader", "res/textures/texture_pack.png");
+            Material material("assets/shaders/Cursor.shader", "assets/textures/texture_pack.png");
             material.Bind();
             material.GetShader().SetUniformMat4f("u_MVP", mvp);
 
@@ -138,7 +138,6 @@ int main()
 
         // Render Phase  
             
-            stoneBlock.Bind();
             glm::mat4 vp = camera.CalcCameraMatrix(45.0f, 0.1f, 100.0f);
 
             float x = 0.0f;
@@ -147,144 +146,24 @@ int main()
 
             for (size_t i = 0; i < 10; i++)
             {
+                bool selected = false;
                 glm::vec3 translation(x, y, z);
-
                 glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
-                glm::mat4 mvp = vp * model;
-                stoneBlock.GetMaterial().GetShader().SetUniformMat4f("u_MVP", mvp);
-                stoneBlock.GetMaterial().GetShader().SetUniform1f("u_BorderThickness", 0.0);
-                stoneBlock.GetMaterial().GetShader().SetUniform3f("u_BorderColor", 0.0, 0.0, 0.0);
+                
                
                 if (pixelInfo.ObjectID != 0)
                     if (pixelInfo.ObjectID - 1 == i)
-                        stoneBlock.GetMaterial().GetShader().SetUniform1f("u_BorderThickness", 1.0);
+                        selected = true;
 
                     
-                renderer.DrawBlock(stoneBlock);
+                renderer.DrawBlock(stoneBlock, vp, model, selected);
                 x++;
             }
-
-            /*
-            for (size_t i = 0; i < 10; i++)
-            {
-                z = 0.0f;
-
-                for (size_t i = 0; i < 10; i++)
-                {
-                    x = 0.0f;
-
-                    for (size_t i = 0; i < 10; i++)
-                    {
-                        glm::vec3 translation(x, y, z);
-
-                        glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
-                        glm::mat4 mvp = vp * model;
-                        stoneBlock.GetMaterial().GetShader().SetUniformMat4f("u_MVP", mvp);
-                        renderer.DrawBlock(stoneBlock);
-                        x++;
-                    }
-                    z++;
-                }
-                y++;
-            }
-
-            dirtBlock.Bind();
-
-            for (size_t i = 0; i < 3; i++)
-            {
-                z = 0.0f;
-
-                for (size_t i = 0; i < 10; i++)
-                {
-                    x = 0.0f;
-
-                    for (size_t i = 0; i < 10; i++)
-                    {
-                        glm::vec3 translation(x, y, z);
-
-                        glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
-                        glm::mat4 mvp = vp * model;
-                        dirtBlock.GetMaterial().GetShader().SetUniformMat4f("u_MVP", mvp);
-                        renderer.DrawBlock(dirtBlock);
-                        x++;
-                    }
-                    z++;
-                }
-                y++;
-            }
-
-            grassBlock.Bind();
-
-            for (size_t i = 0; i < 1; i++)
-            {
-                z = 0.0f;
-
-                for (size_t i = 0; i < 10; i++)
-                {
-                    x = 0.0f;
-
-                    for (size_t i = 0; i < 10; i++)
-                    {
-                        glm::vec3 translation(x, y, z);
-
-                        glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
-                        glm::mat4 mvp = vp * model;
-                        grassBlock.GetMaterial().GetShader().SetUniformMat4f("u_MVP", mvp);
-                        renderer.DrawBlock(grassBlock);
-                        x++;
-                    }
-                    z++;
-                }
-                y++;
-            }
-
-            y = 30.0f;
-            glm::vec3 translation(x, y, z);
-
-            glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
-            glm::mat4 mvp = vp * model;
-            grassBlock.GetMaterial().GetShader().SetUniformMat4f("u_MVP", mvp);
-            renderer.DrawBlock(grassBlock);
-
-            dirtBlock.Unbind();
-            grassBlock.Unbind();
-            */
 
             stoneBlock.Unbind();
         }
 
-        /*
-        {
-            ImGui::Begin("Modifications");
-
-            ImGui::Text("Translation for first block:");
-            ImGui::PushItemWidth(100);
-            ImGui::SliderFloat("X##TranslationA", &translationA.x, -5.0f, 5.0f);
-            ImGui::SameLine();
-            ImGui::SliderFloat("Y##TranslationA", &translationA.y, -5.0f, 5.0f);
-            ImGui::SameLine();
-            ImGui::SliderFloat("Z##TranslationA", &translationA.z, -5.0f, 5.0f);
-            ImGui::PopItemWidth();
-
-            ImGui::Separator();
-
-            ImGui::Text("Translation for second block:");
-            ImGui::PushItemWidth(100);
-            ImGui::SliderFloat("X##TranslationB", &translationB.x, -2.0f, 2.0f);
-            ImGui::SameLine();
-            ImGui::SliderFloat("Y##TranslationB", &translationB.y, -2.0f, 2.0f);
-            ImGui::SameLine();
-            ImGui::SliderFloat("Z##TranslationB", &translationB.z, -2.0f, 2.0f);
-            ImGui::PopItemWidth();
-
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-            ImGui::End();
-        }
-
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-        */
-
+        
         glfwSwapBuffers(context->GetWindow());
         glfwPollEvents();
     }

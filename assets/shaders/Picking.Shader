@@ -3,21 +3,21 @@
                                                                                     
 layout (location = 0) in vec3 Position;                                             
                                                                                     
-uniform mat4 gWVP;                                                                  
+uniform mat4 u_MVP;                                                                  
                                                                                     
 void main()                                                                         
 {                                                                                   
-    gl_Position = gWVP * vec4(Position, 1.0);                                       
+    gl_Position = u_MVP * vec4(Position, 1.0);                                       
 }
 
 #shader fragment
 #version 330
 
-uniform uint gObjectIndex;
+uniform uint u_ObjectIndex;
 
 out uvec3 FragColor;
 
 void main()
 {
-   FragColor = uvec3(gObjectIndex, 0.0, 0.0);
+   FragColor = uvec3(u_ObjectIndex, 0.0, 0.0);
 }

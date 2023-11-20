@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "Mesh.h"
-#include "Material.h"
+#include "material/Material.h"
 
 enum class BlockType
 {

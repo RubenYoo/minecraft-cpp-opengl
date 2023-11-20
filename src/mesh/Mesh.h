@@ -3,7 +3,7 @@
 #include "openGL/VertexArray.h"
 #include "openGL/IndexBuffer.h"
 
-#include <glm/glm.hpp>
+#include "utils/glm/glm.hpp"
 #include <GL/glew.h>
 #include <vector>
 #include <memory>
