@@ -96,6 +96,9 @@
     <ClCompile Include="src\mesh\CursorMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\picking\BlockPick.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\Block.shader" />
@@ -1433,6 +1436,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\mesh\CursorMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\picking\BlockPick.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

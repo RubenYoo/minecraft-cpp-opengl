@@ -157,6 +157,7 @@
     <ClCompile Include="src\mesh\CursorMesh.cpp" />
     <ClCompile Include="src\mesh\Mesh.cpp" />
     <ClCompile Include="src\openGL\GLDebugMessageCallback.cpp" />
+    <ClCompile Include="src\picking\BlockPick.cpp" />
     <ClCompile Include="src\utils\glm\detail\glm.cpp" />
     <ClCompile Include="src\imgui\imgui.cpp" />
     <ClCompile Include="src\imgui\imgui_demo.cpp" />
@@ -326,6 +327,7 @@
     <ClInclude Include="src\mesh\CursorMesh.h" />
     <ClInclude Include="src\mesh\Mesh.h" />
     <ClInclude Include="src\openGL\GLDebugMessageCallback.h" />
+    <ClInclude Include="src\picking\BlockPick.h" />
     <ClInclude Include="src\utils\glm\common.hpp" />
     <ClInclude Include="src\utils\glm\detail\compute_common.hpp" />
     <ClInclude Include="src\utils\glm\detail\compute_vector_relational.hpp" />

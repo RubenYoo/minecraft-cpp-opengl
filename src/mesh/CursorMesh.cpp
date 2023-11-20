@@ -2,7 +2,7 @@
 
 CursorMesh::CursorMesh()
 {
-    std::vector<Vertex> vertices;
+    std::vector<Vertex3> vertices;
 
     vertices.push_back({ {0.0f,  0.0f + 12.0f, 1.0f}, {48.0f / 256.0f, 246.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });
     vertices.push_back({ {32.0f, 0.0f + 12.0f, 1.0f}, {64.0f / 256.0f ,246.0f / 256.0f}, {0.0f, 0.0f, 0.0f} });

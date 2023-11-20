@@ -30,8 +30,8 @@ public:
     PixelInfo ReadPixel(unsigned int x, unsigned int y);
 
 private:
-    GLuint m_fbo = 0;
-    GLuint m_pickingTexture = 0;
-    GLuint m_depthTexture = 0;
+    GLuint m_Fbo = 0;
+    GLuint m_PickingTexture = 0;
+    GLuint m_DepthTexture = 0;
 
 };

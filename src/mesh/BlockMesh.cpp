@@ -4,7 +4,8 @@ BlockMesh::BlockMesh(BlockType blockType)
 	: m_BlockType(blockType)
 {
 
-    std::vector<Vertex> vertices;
+    std::vector<Vertex3> vertices;
+
     float texPos = 1.0f / 16.0f;
     float sideX(0.0f), upX(0.0f), bottomX(0.0f);
     float sideY(0.0f), upY(0.0f), bottomY(0.0f);

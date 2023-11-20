@@ -7,6 +7,7 @@
 #include "material/Shader.h"
 #include "mesh/BlockMesh.h"
 #include "mesh/CursorMesh.h"
+#include "picking/BlockPick.h"
 
 class Renderer
 {
@@ -19,7 +20,7 @@ public:
 	void DrawCursor(const CursorMesh& cursorMesh, glm::mat4 vp, glm::mat4 model) const;
 	void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
 
-	//void PickBlock(const BlockMesh& blockMesh, glm::mat4 vp, glm::mat4 model) const;
+	void PickBlock(const BlockPick& blockPick, glm::mat4 vp, glm::mat4 model, GLuint index) const;
 
 private:
 

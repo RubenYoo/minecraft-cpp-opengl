@@ -45,3 +45,17 @@ void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& 
 {
 	glDrawElements(GL_TRIANGLES, GLint(ib.GetCount()), GL_UNSIGNED_INT, nullptr);
 }
+
+void Renderer::PickBlock(const BlockPick& blockPick, glm::mat4 vp, glm::mat4 model, GLuint index) const
+{
+	blockPick.Bind();
+
+	glm::mat4 mvp = vp * model;
+
+	blockPick.GetShader().SetUniformMat4f("u_MVP", mvp);
+	blockPick.GetShader().SetUniform1ui("u_ObjectIndex", index);
+
+	Draw(blockPick.GetMesh().GetVertexArray(), blockPick.GetMesh().GetIndexBuffer(), blockPick.GetShader());
+
+	//blockPick.Unbind();
+}
