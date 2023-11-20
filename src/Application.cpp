@@ -38,7 +38,7 @@ int main()
     PickingTexture pickingTexture;
     pickingTexture.Init(WIDTH, HEIGHT);
     BlockPick blockPick;
-    
+    std::vector<size_t> removed;
     
     while (!glfwWindowShouldClose(context->GetWindow()))
     {
@@ -60,7 +60,9 @@ int main()
                 glm::vec3 translation(x, y, z);
                 glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
 
-                renderer.PickBlock(blockPick, vp, model, i + 1);
+                if (std::find(removed.begin(), removed.end(), i) == removed.end())
+                    renderer.PickBlock(blockPick, vp, model, i + 1);
+
                 x++;
             }
 
@@ -73,6 +75,11 @@ int main()
         {
             // Checking if a block is selected
             PickingTexture::PixelInfo pixelInfo = pickingTexture.ReadPixel(WIDTH / 2, HEIGHT / 2);
+            bool clicked = false;
+
+            if (glfwGetMouseButton(context->GetWindow(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+                clicked = true;
+
 
             glClearColor(0.729f, 0.976f, 1.0f, 1.0f);
             renderer.Clear();
@@ -90,8 +97,13 @@ int main()
                 if (pixelInfo.ObjectID != 0)
                     if (pixelInfo.ObjectID - 1 == i)
                         selected = true;
-   
-                renderer.DrawBlock(stoneBlock, vp, model, selected);
+
+                        
+                if (clicked && selected)
+                    removed.push_back(i);
+
+                if(std::find(removed.begin(), removed.end(), i) == removed.end())
+                    renderer.DrawBlock(stoneBlock, vp, model, selected);
                 x++;
             }
 
