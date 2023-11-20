@@ -30,12 +30,13 @@ void main()
 {
     vec4 texColor = texture(u_Texture, v_TexCoord);
     FragColor = texColor;
-
+    
     float borderFactorX = min(abs(fwidth(gl_FragCoord.x)), u_BorderThickness * 0.5);
     float borderFactorY = min(abs(fwidth(gl_FragCoord.y)), u_BorderThickness * 0.5);
     
     float borderFactor = 1.0 - smoothstep(0.5 - borderFactorX, 0.5 + borderFactorX, min(borderFactorX, borderFactorY));
     FragColor.rgb = mix(u_BorderColor, FragColor.rgb, borderFactor);
-
+    
     FragColor.a = 1.0;
+
 }

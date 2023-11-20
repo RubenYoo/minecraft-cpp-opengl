@@ -26,7 +26,7 @@ int main()
         std::cout << ex.what();
     }
     
-
+    context->EnableVSync();
     BlockMesh stoneBlock(BlockType::STONE);
     BlockMesh grassBlock(BlockType::GRASS);
     BlockMesh dirtBlock(BlockType::DIRT);
@@ -153,7 +153,7 @@ int main()
                 glm::mat4 mvp = vp * model;
                 stoneBlock.GetMaterial().GetShader().SetUniformMat4f("u_MVP", mvp);
                 stoneBlock.GetMaterial().GetShader().SetUniform1f("u_BorderThickness", 0.0);
-                stoneBlock.GetMaterial().GetShader().SetUniform3f("u_BorderColor", 1.0, 1.0, 1.0);
+                stoneBlock.GetMaterial().GetShader().SetUniform3f("u_BorderColor", 0.0, 0.0, 0.0);
                
                 if (pixelInfo.ObjectID != 0)
                     if (pixelInfo.ObjectID - 1 == i)
