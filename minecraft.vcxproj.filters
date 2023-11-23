@@ -99,6 +99,9 @@
     <ClCompile Include="src\picking\BlockPick.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\mesh\ChunkMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\Block.shader" />
@@ -1439,6 +1442,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\picking\BlockPick.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mesh\ChunkMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

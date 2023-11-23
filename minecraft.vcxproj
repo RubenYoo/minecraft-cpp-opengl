@@ -154,6 +154,7 @@
     <ClCompile Include="src\camera\Camera.cpp" />
     <ClCompile Include="src\Context.cpp" />
     <ClCompile Include="src\material\Material.cpp" />
+    <ClCompile Include="src\mesh\ChunkMesh.cpp" />
     <ClCompile Include="src\mesh\CursorMesh.cpp" />
     <ClCompile Include="src\mesh\Mesh.cpp" />
     <ClCompile Include="src\openGL\GLDebugMessageCallback.cpp" />
@@ -324,6 +325,7 @@
     <ClInclude Include="src\camera\Camera.h" />
     <ClInclude Include="src\Context.h" />
     <ClInclude Include="src\material\Material.h" />
+    <ClInclude Include="src\mesh\ChunkMesh.h" />
     <ClInclude Include="src\mesh\CursorMesh.h" />
     <ClInclude Include="src\mesh\Mesh.h" />
     <ClInclude Include="src\openGL\GLDebugMessageCallback.h" />

@@ -29,6 +29,7 @@ class Mesh
 {
 public:
     Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices);
+    Mesh(std::vector<Vertex2> vertices, std::vector<GLuint> indices);
     Mesh(std::vector<Vertex3> vertices, std::vector<GLuint> indices);
     ~Mesh();
 	

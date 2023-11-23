@@ -6,6 +6,7 @@
 #include "picking/PickingTexture.h"
 #include "mesh/CursorMesh.h"
 #include "picking/BlockPick.h"
+#include "mesh/ChunkMesh.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -28,21 +29,27 @@ int main()
         std::cout << ex.what();
     }
     
-    context->EnableVSync();
+    //context->EnableVSync();
 
     Camera camera(WIDTH, HEIGHT, glm::vec3(0.0f, 0.0f, 3.0f));
     Renderer renderer;
 
-    BlockMesh stoneBlock(BlockType::STONE);
+    //BlockMesh stoneBlock(BlockType::STONE);
 
     PickingTexture pickingTexture;
     pickingTexture.Init(WIDTH, HEIGHT);
     BlockPick blockPick;
     std::vector<size_t> removed;
+
+
+    std::unique_ptr<ChunkMesh> chunkMesh = std::make_unique<ChunkMesh>();
+    
     
     while (!glfwWindowShouldClose(context->GetWindow()))
     {
         camera.Inputs(context->GetWindow());
+
+        /*
 
         // Picking Phase
         {
@@ -109,6 +116,14 @@ int main()
 
             stoneBlock.Unbind();
         }
+        */
+        
+
+        glClearColor(0.729f, 0.976f, 1.0f, 1.0f);
+        renderer.Clear();
+        glm::mat4 vp = camera.CalcCameraMatrix(45.0f, 0.1f, 100.0f);
+        chunkMesh->GenerateChunk(vp);
+        
 
         // Render Cursor
         {

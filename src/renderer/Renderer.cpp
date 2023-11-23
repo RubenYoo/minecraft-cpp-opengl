@@ -28,6 +28,8 @@ void Renderer::DrawBlock(const BlockMesh& blockMesh, glm::mat4 vp, glm::mat4 mod
 		blockMesh.GetMaterial().GetShader().SetUniform1f("u_BorderThickness", 0.0);
 
 	Draw(blockMesh.GetMesh().GetVertexArray(), blockMesh.GetMesh().GetIndexBuffer(), blockMesh.GetMaterial().GetShader());
+
+	blockMesh.Unbind();
 }
 
 void Renderer::DrawCursor(const CursorMesh& cursorMesh, glm::mat4 vp, glm::mat4 model) const

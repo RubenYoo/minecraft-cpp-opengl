@@ -1,10 +1,11 @@
 #include "BlockMesh.h"
 
-BlockMesh::BlockMesh(BlockType blockType)
+BlockMesh::BlockMesh(BlockType blockType, Material& material, std::set<BlockFace> blockFaces)
 	: m_BlockType(blockType)
 {
 
-    std::vector<Vertex3> vertices;
+    std::vector<Vertex2> vertices;
+    std::vector<GLuint> indices;
 
     float texPos = 1.0f / 16.0f;
     float sideX(0.0f), upX(0.0f), bottomX(0.0f);
@@ -51,54 +52,120 @@ BlockMesh::BlockMesh(BlockType blockType)
     default:
         break;
     }
+    
+    size_t offset = 0;
 
+    if (blockFaces.find(BlockFace::BACK) != blockFaces.end() || blockFaces.find(BlockFace::ALL) != blockFaces.end())
+    {
+        vertices.push_back({ {0.0f, 0.0f, 1.0f}, {sideX, sideY} });
+        vertices.push_back({ {1.0f, 0.0f, 1.0f}, {sideX + texPos , sideY} });
+        vertices.push_back({ {1.0f, 1.0f, 1.0f}, {sideX + texPos, sideY + texPos} });
+        vertices.push_back({ {0.0f, 1.0f, 1.0f}, {sideX, sideY + texPos} });
 
-    // SIDE FACE
-    vertices.push_back({ {0.0f, 0.0f, 1.0f}, {sideX, sideY}, {0.0f, 0.0f, 0.0f} });
-    vertices.push_back({ {1.0f, 0.0f, 1.0f}, {sideX + texPos , sideY}, {0.0f, 0.0f, 0.0f} });
-    vertices.push_back({ {1.0f, 1.0f, 1.0f}, {sideX + texPos, sideY + texPos}, {0.0f, 0.0f, 0.0f} });
-    vertices.push_back({ {0.0f, 1.0f, 1.0f}, {sideX, sideY + texPos}, {0.0f, 0.0f, 0.0f} });
+        indices.push_back(0 + offset);
+        indices.push_back(1 + offset);
+        indices.push_back(2 + offset);
+        indices.push_back(2 + offset);
+        indices.push_back(3 + offset);
+        indices.push_back(0 + offset);
 
-    vertices.push_back({ {0.0f, 0.0f, 0.0f}, {sideX + texPos, sideY}, {0.0f, 0.0f, 0.0f} });
-    vertices.push_back({ {1.0f, 0.0f, 0.0f}, {sideX, sideY}, {0.0f, 0.0f, 0.0f} });
-    vertices.push_back({ {1.0f, 1.0f, 0.0f}, {sideX, sideY + texPos}, {0.0f, 0.0f, 0.0f} });
-    vertices.push_back({ {0.0f, 1.0f, 0.0f}, {sideX + texPos, sideY + texPos}, {0.0f, 0.0f, 0.0f} });
+        offset += 4;
+    }
 
-    // UP FACE
-    vertices.push_back({ {0.0f, 1.0f, 1.0f}, {upX, upY}, {0.0f, 0.0f, 0.0f} });
-    vertices.push_back({ {1.0f, 1.0f, 1.0f}, {upX + texPos, upY}, {0.0f, 0.0f, 0.0f} });
-    vertices.push_back({ {1.0f, 1.0f, 0.0f}, {upX + texPos, upY + texPos}, {0.0f, 0.0f, 0.0f} });
-    vertices.push_back({ {0.0f, 1.0f, 0.0f}, {upX, upY + texPos}, {0.0f, 0.0f, 0.0f} });
+    if (blockFaces.find(BlockFace::RIGHT) != blockFaces.end() || blockFaces.find(BlockFace::ALL) != blockFaces.end())
+    {
+        vertices.push_back({ {1.0f, 0.0f, 1.0f}, {sideX, sideY} });
+        vertices.push_back({ {1.0f, 0.0f, 0.0f}, {sideX + texPos , sideY} });
+        vertices.push_back({ {1.0f, 1.0f, 0.0f}, {sideX + texPos, sideY + texPos} });
+        vertices.push_back({ {1.0f, 1.0f, 1.0f}, {sideX, sideY + texPos} });
 
-    // BOTTOM FACE
-    vertices.push_back({ {0.0f, 0.0f, 1.0f}, {bottomX, bottomY}, {0.0f, 0.0f, 0.0f} });
-    vertices.push_back({ {1.0f, 0.0f, 1.0f}, {bottomX + texPos, bottomY}, {0.0f, 0.0f, 0.0f} });
-    vertices.push_back({ {1.0f, 0.0f, 0.0f}, {bottomX + texPos, bottomY + texPos}, {0.0f, 0.0f, 0.0f} });
-    vertices.push_back({ {0.0f, 0.0f, 0.0f}, {bottomX, bottomY + texPos}, {0.0f, 0.0f, 0.0f} });
+        indices.push_back(0 + offset);
+        indices.push_back(1 + offset);
+        indices.push_back(2 + offset);
+        indices.push_back(2 + offset);
+        indices.push_back(3 + offset);
+        indices.push_back(0 + offset);
 
-    std::vector<GLuint> indices{
-                        0, 1, 2,
-                        2, 3, 0,
-                        1, 5, 6,
-                        6, 2, 1,
-                        5, 4, 7,
-                        7, 6, 5,
-                        4, 0, 3,
-                        3, 7, 4,
-                        8, 9, 10,
-                        10, 11, 8,
-                        13, 12, 15,
-                        15, 14, 13
-    };
+        offset += 4;
+    }
+
+    if (blockFaces.find(BlockFace::FRONT) != blockFaces.end() || blockFaces.find(BlockFace::ALL) != blockFaces.end())
+    {
+        vertices.push_back({ {1.0f, 0.0f, 0.0f}, {sideX, sideY} });
+        vertices.push_back({ {0.0f, 0.0f, 0.0f}, {sideX + texPos , sideY} });
+        vertices.push_back({ {0.0f, 1.0f, 0.0f}, {sideX + texPos, sideY + texPos} });
+        vertices.push_back({ {1.0f, 1.0f, 0.0f}, {sideX, sideY + texPos} });
+
+        indices.push_back(0 + offset);
+        indices.push_back(1 + offset);
+        indices.push_back(2 + offset);
+        indices.push_back(2 + offset);
+        indices.push_back(3 + offset);
+        indices.push_back(0 + offset);
+
+        offset += 4;
+    }
+
+    if (blockFaces.find(BlockFace::LEFT) != blockFaces.end() || blockFaces.find(BlockFace::ALL) != blockFaces.end())
+    {
+        vertices.push_back({ {0.0f, 0.0f, 0.0f}, {sideX, sideY} });
+        vertices.push_back({ {0.0f, 0.0f, 1.0f}, {sideX + texPos , sideY} });
+        vertices.push_back({ {0.0f, 1.0f, 1.0f}, {sideX + texPos, sideY + texPos} });
+        vertices.push_back({ {0.0f, 1.0f, 0.0f}, {sideX, sideY + texPos} });
+
+        indices.push_back(0 + offset);
+        indices.push_back(1 + offset);
+        indices.push_back(2 + offset);
+        indices.push_back(2 + offset);
+        indices.push_back(3 + offset);
+        indices.push_back(0 + offset);
+
+        offset += 4;
+    }
+
+    if (blockFaces.find(BlockFace::UP) != blockFaces.end() || blockFaces.find(BlockFace::ALL) != blockFaces.end())
+    {
+        vertices.push_back({ {0.0f, 1.0f, 1.0f}, {upX, upY} });
+        vertices.push_back({ {1.0f, 1.0f, 1.0f}, {upX + texPos, upY} });
+        vertices.push_back({ {1.0f, 1.0f, 0.0f}, {upX + texPos, upY + texPos} });
+        vertices.push_back({ {0.0f, 1.0f, 0.0f}, {upX, upY + texPos} });
+
+        indices.push_back(0 + offset);
+        indices.push_back(1 + offset);
+        indices.push_back(2 + offset);
+        indices.push_back(2 + offset);
+        indices.push_back(3 + offset);
+        indices.push_back(0 + offset);
+
+        offset += 4;
+    }
+
+    if (blockFaces.find(BlockFace::DOWN) != blockFaces.end() || blockFaces.find(BlockFace::ALL) != blockFaces.end())
+    {
+        vertices.push_back({ {0.0f, 0.0f, 0.0f}, {bottomX, bottomY} });
+        vertices.push_back({ {1.0f, 0.0f, 0.0f}, {bottomX + texPos, bottomY} });
+        vertices.push_back({ {1.0f, 0.0f, 1.0f}, {bottomX + texPos, bottomY + texPos} });
+        vertices.push_back({ {0.0f, 0.0f, 1.0f}, {bottomX, bottomY + texPos} });
+
+        indices.push_back(0 + offset);
+        indices.push_back(1 + offset);
+        indices.push_back(2 + offset);
+        indices.push_back(2 + offset);
+        indices.push_back(3 + offset);
+        indices.push_back(0 + offset);
+
+        offset += 4;
+    }
 
     m_Mesh = std::make_unique<Mesh>(vertices, indices);
 
-    m_Material = std::make_unique<Material>("assets/shaders/Block.shader", "assets/textures/texture_pack.png");
+    m_Material = &material;
 }
 
 BlockMesh::~BlockMesh()
 {
 }
+
 
 void BlockMesh::Bind() const
 {
@@ -121,3 +188,4 @@ void BlockMesh::BindMaterial() const
 {
     m_Material->Bind();
 }
+
