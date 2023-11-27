@@ -32,6 +32,9 @@ ChunkMesh::~ChunkMesh()
 void ChunkMesh::GenerateChunk(glm::mat4 vp)
 {
 	Renderer renderer;
+	std::vector<Vertex2> vertices;
+	std::vector<GLuint> indices;
+	size_t vertexOffset = 0;
 
 	for (size_t i = 0; i < m_SizeX; i++)
 	{
@@ -50,14 +53,40 @@ void ChunkMesh::GenerateChunk(glm::mat4 vp)
 						std::pair<BlockType, std::set<BlockFace>> myBlock = { m_BlockData[i][j][k], faces };
 
 						if (m_BlockMeshes.find(myBlock) == m_BlockMeshes.end())
-							m_BlockMeshes[myBlock] = std::make_unique<BlockMesh>(m_BlockData[i][j][k], *m_Material, faces);
+							m_BlockMeshes[myBlock] = std::make_unique<BlockMesh>(m_BlockData[i][j][k], faces);
+						
 
-						renderer.DrawBlock(*m_BlockMeshes[myBlock], vp, model, false);
+						std::vector<Vertex2> blockVertices = m_BlockMeshes[myBlock]->GetVertices();
+
+						for (Vertex2& vertex : blockVertices)
+						{
+							// Apply translation
+							vertex.position.x += i;
+							vertex.position.y += j;
+							vertex.position.z += k;
+							vertices.push_back(vertex); 
+						}
+
+						for (GLuint index : m_BlockMeshes[myBlock]->GetIndices())
+						{
+							indices.push_back(index + static_cast<GLuint>(vertexOffset));
+						}
+
+						vertexOffset += blockVertices.size();
 					}
 				}
 			}
 		}
 	}
+
+	m_Material->Bind();
+	Mesh chunkMesh(vertices, indices);
+	m_Material->GetShader().SetUniformMat4f("u_MVP", vp);
+	m_Material->GetShader().SetUniform3f("u_BorderColor", 0.0, 0.0, 0.0);
+	m_Material->GetShader().SetUniform1f("u_BorderThickness", 0.0);
+
+	renderer.Draw(chunkMesh.GetVertexArray(), chunkMesh.GetIndexBuffer(), m_Material->GetShader());
+
 }
 
 std::set<BlockFace> ChunkMesh::WhichFaceIsVisible(size_t x, size_t y, size_t z)

@@ -16,7 +16,7 @@ public:
 	~Renderer();
 
 	void Clear() const;
-	void DrawBlock(const BlockMesh& blockMesh, glm::mat4 vp, glm::mat4 model, bool selected) const;
+	//void DrawBlock(const BlockMesh& blockMesh, glm::mat4 vp, glm::mat4 model, bool selected) const;
 	void DrawCursor(const CursorMesh& cursorMesh, glm::mat4 vp, glm::mat4 model) const;
 	void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
 

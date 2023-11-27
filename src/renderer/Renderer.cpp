@@ -13,6 +13,7 @@ void Renderer::Clear() const
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+/*
 void Renderer::DrawBlock(const BlockMesh& blockMesh, glm::mat4 vp, glm::mat4 model, bool selected) const
 {
 	blockMesh.Bind();
@@ -31,6 +32,7 @@ void Renderer::DrawBlock(const BlockMesh& blockMesh, glm::mat4 vp, glm::mat4 mod
 
 	blockMesh.Unbind();
 }
+*/
 
 void Renderer::DrawCursor(const CursorMesh& cursorMesh, glm::mat4 vp, glm::mat4 model) const
 {

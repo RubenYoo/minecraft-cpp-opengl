@@ -28,21 +28,14 @@ enum class BlockFace
 class BlockMesh
 {
 public:
-	BlockMesh(BlockType blockType, Material& material, std::set<BlockFace> blockFaces = { BlockFace::ALL});
+	BlockMesh(BlockType blockType, std::set<BlockFace> blockFaces = { BlockFace::ALL});
 	~BlockMesh();
 
-	void Bind() const;
-	void Unbind() const;
-	void BindMesh() const;
-	void BindMaterial() const;
-
-
-	inline const Material& GetMaterial() const { return *m_Material; }
-	inline const Mesh& GetMesh() const { return *m_Mesh; }
+	inline std::vector<Vertex2> GetVertices() const { return m_Vertices; }
+	inline std::vector<GLuint> GetIndices() const { return m_Indices; }
 
 private:
 	BlockType m_BlockType;
-
-	std::unique_ptr<Mesh> m_Mesh;
-	Material* m_Material;
+	std::vector<Vertex2> m_Vertices;
+	std::vector<GLuint> m_Indices;
 };
